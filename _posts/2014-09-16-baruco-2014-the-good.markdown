@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Baruco 2014: The good"
+title: "Baruco 2014: The good, the bad and the ugly"
 date: 2014-09-16 23:42:46 -0400
 comments: true
 categories: ["Baruco2014", "Ruby"]
