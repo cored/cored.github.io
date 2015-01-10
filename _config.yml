@@ -11,6 +11,7 @@ github_username:  cored
 permalink: /blog/:year/:month/:day/:title
 
 # Build settings
-markdown: kramdown
-kramdown: 
-  input: GFM
+markdown: redcarpet
+
+# Syntax 
+highlighter: pygments
