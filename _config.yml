@@ -1,8 +1,8 @@
 # Site settings
-title: Thoughts on Everything
+title: Black Matter
 email: george.rafael@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
-  Writes about web development in particular, programming in general, philosophy on 
+  Rambling about web development in particular, programming in general, philosophy on 
   the side and everything else in the middle.
 baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://cored.github.io" # the base hostname & protocol for your site
