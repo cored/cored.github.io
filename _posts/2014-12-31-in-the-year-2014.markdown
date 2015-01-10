@@ -1,0 +1,66 @@
+---
+layout: post
+title: "In the Year 2014"
+date: 2014-12-31T13:55:01-05:00
+---
+
+2014 was a year in which I learned and discovered a lot of things, not just in
+the professional realm but in the personal too.
+
+# Great blog posts I read
+
+[If cameras can't hold police accountable in Eric Garner's death, what can?](http://www.theverge.com/2014/12/4/7332307/eric-garner-daniel-pantaleo-police-death-camera-accountability)
+
+[How iPads are making airports less terrible](http://www.theverge.com/2014/11/20/7254931/how-ipads-are-making-airports-less-miserable-places)
+
+[How to live for a month in virtual reality](http://www.theverge.com/2014/11/18/7235895/seeing-i-artist-to-spend-a-month-in-virtual-reality)
+
+[Why we teach rack in our Ruby on the Server Bootcamp](http://www.bignerdranch.com/blog/why-we-teach-rack-in-our-ruby-on-the-server-bootcamp/?utm_source=rubyweekly&utm_medium=email)
+
+[How we've made Phusion Passenger 5 ("Raptor") up 4x faster than Unicorn, up to
+2x faster than Puma, Torquebox](http://www.rubyraptor.org/how-we-made-raptor-up-to-4x-faster-than-unicorn-and-up-to-2x-faster-than-puma-torquebox/?utm_source=rubyweekly&utm_medium=email)
+
+# Great talks I watched
+
+[Katrina Owen - Overkill](https://www.youtube.com/watch?v=GTpZ0ffQrIE&index=17&list=PLpURC3VhaQD0ZAbMQcN_-6Dra_rWD7VwU)
+
+[Nell Shamrell - Test Driven Development: A Love Story](https://www.youtube.com/watch?v=nBtO1UOK9Hs)
+
+[I share everything. Or do I?](http://ideas.ted.com/2014/07/01/i-share-everything-or-do-i/)
+
+[Ernie Miller - Ruby after Rails](https://www.youtube.com/watch?v=EgjJYkuV0Sc&index=117&list=WL)
+
+[Questions for Matz](https://www.youtube.com/watch?v=_zoG2i7pMxg&index=116&list=WL)
+
+[Are you lonely?](https://www.youtube.com/watch?v=WACeVniGlqw&index=91&list=WL)
+
+Of course I saw a ton more talks but this were the ones that I think resonate
+the most on me.
+
+# Papers I read
+
+Not that much on this department; will try to read more papers for thew new year :-)
+
+[How to read a paper](http://ccr.sigcomm.org/online/files/p83-keshavA.pdf)
+
+[Growing a language](http://www.cs.virginia.edu/~evans/cs655/readings/steele.pdf)
+
+# Katas solved
+
+I actually solved more than this, but I wasn't tracking katas from other
+sources.
+
+[70](http://codewars.com/users/cored)
+
+# Books I read
+
+This year was slow in comparison with others but I'm trying to absorb what
+I read.
+
+[Read on 2014](https://www.goodreads.com/review/list/5808742-rafael-george?shelf=2014_read)
+
+# Plans for 2015
+
+* Read a paper each week
+* Start learning Clojure and Go
+* Read a book a week
