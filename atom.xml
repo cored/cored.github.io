@@ -4,13 +4,38 @@
  <title>Black Matter</title>
  <link href="http://cored.github.ioatom.xml" rel="self"/>
  <link href="http://cored.github.io"/>
- <updated>2015-01-11T11:39:18-05:00</updated>
+ <updated>2015-01-11T18:55:44-05:00</updated>
  <id>http://cored.github.io</id>
  <author>
    <name></name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>Picking the Language of the Year</title>
+   <link href="http://cored.github.io/blog/2015/01/11/picking-the-language-of-the-year"/>
+   <updated>2015-01-11T18:41:31-05:00</updated>
+   <id>http://cored.github.io/blog/2015/01/11/picking-the-language-of-the-year</id>
+   <content type="html">&lt;p&gt;I don&amp;#39;t need to become an expert just expose myself to new ideas. But one of the issues 
+of learning something new when there are so many options is to know which
+option to pick. &lt;/p&gt;
+
+&lt;p&gt;So I decided to make an effort on finding out; the lazy approach would be to
+just ask the web about it. And of course the web has a lot of different
+opinions parting from &lt;a href=&quot;http://www.makeuseof.com/tag/pick-programming-language-learn-today-get-great-job-2-years/&quot;&gt;learning software design&lt;/a&gt;
+instead of a programming language to picking up the most &lt;a href=&quot;http://www.tiobe.com/index.php/content/paperinfo/tpci/index.html&quot;&gt;popular&lt;/a&gt; if you
+don&amp;#39;t know it already. &lt;/p&gt;
+
+&lt;p&gt;I think my approach is based on a mix of both; I would like to learn something 
+pragmatic and also I would that thing teach me new skills in an holistic way. 
+So my approach would be based on identifying what is lacking on my knowledge as a 
+programmer and parting from there I would have a better understanding of my own needs. 
+The downside on this is that I really don&amp;#39;t know what I don&amp;#39;t know. 
+That&amp;#39;s why I just decide to start reading one book with different ideas in 
+it - &lt;a href=&quot;https://pragprog.com/book/btlang/seven-languages-in-seven-weeks&quot;&gt;Seven languages in seven weeks&lt;/a&gt;. &lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>In the Year 2014</title>
