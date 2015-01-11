@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>My GPA at Code Climate is 3.59: A refactoring story</title>
+  <meta name="description" content="What does that title suppose to mean? Yes that&#39;s a very outstanding number I saw that today in a project that I&#39;m working on LocalSupport. But then I...">
+
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Arvo">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://cored.github.io/blog/2014/02/19/my-gpa-at-code-climate-is-3-dot-59-a-refactoring-story">
+  <link rel="alternate" type="application/rss+xml" title="Black Matter" href="http://cored.github.io/feed.xml" />
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Black Matter</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">My GPA at Code Climate is 3.59: A refactoring story</h1>
+    <p class="post-meta">Feb 19, 2014</p>
+  </header>
+
+  <article class="post-content">
+    <p>What does that title suppose to mean? Yes that&#39;s a very outstanding number I saw that today in a project that I&#39;m working on <a href="http://github.com/tansaku/LocalSupport">LocalSupport</a>. But then I just went to the code and use <a href="https://github.com/seattlerb/flog">Flog</a> and I found this: </p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">814</span><span class="o">.</span><span class="mi">0</span><span class="p">:</span> <span class="n">flog</span> <span class="n">total</span>
+<span class="mi">8</span><span class="o">.</span><span class="mi">1</span><span class="p">:</span> <span class="n">flog</span><span class="o">/</span><span class="nb">method</span> <span class="n">average</span>
+
+<span class="mi">60</span><span class="o">.</span><span class="mi">9</span><span class="p">:</span> <span class="n">main</span><span class="c1">#none</span>
+<span class="mi">35</span><span class="o">.</span><span class="mi">4</span><span class="p">:</span> <span class="no">ApplicationController</span><span class="c1">#store_location app/controllers/application_controller.rb:6</span>
+<span class="mi">33</span><span class="o">.</span><span class="mi">5</span><span class="p">:</span> <span class="no">UsersController</span><span class="c1">#update app/controllers/users_controller.rb:7</span>
+<span class="mi">33</span><span class="o">.</span><span class="mi">4</span><span class="p">:</span> <span class="n">namespace</span><span class="p">(</span><span class="n">jasmine</span><span class="p">)</span><span class="o">::</span><span class="n">task</span><span class="c1">#ci lib/tasks/jasmine.rake:28</span>
+<span class="mi">32</span><span class="o">.</span><span class="mi">1</span><span class="p">:</span> <span class="no">Organization</span><span class="c1">#none</span>
+<span class="mi">20</span><span class="o">.</span><span class="mi">7</span><span class="p">:</span> <span class="no">CreateOrganizationFromArray</span><span class="c1">#build_organization app/models/create_organization_from_array.rb:40</span>
+<span class="mi">18</span><span class="o">.</span><span class="mi">8</span><span class="p">:</span> <span class="no">OrphansController</span><span class="c1">#create app/controllers/orphans_controller.rb:13</span>
+<span class="mi">18</span><span class="o">.</span><span class="mi">3</span><span class="p">:</span> <span class="no">OrganizationsController</span><span class="c1">#search app/controllers/organizations_controller.rb:7</span>
+<span class="mi">18</span><span class="o">.</span><span class="mi">2</span><span class="p">:</span> <span class="n">namespace</span><span class="p">(</span><span class="n">jasmine</span><span class="p">)</span><span class="o">::</span><span class="n">task</span><span class="c1">#server lib/tasks/jasmine.rake:55</span>
+<span class="mi">17</span><span class="o">.</span><span class="mi">8</span><span class="p">:</span> <span class="no">OrganizationsController</span><span class="c1">#update app/controllers/organizations_controller.rb:69</span>
+<span class="mi">17</span><span class="o">.</span><span class="mi">4</span><span class="p">:</span> <span class="no">Organization</span><span class="o">::</span><span class="n">add_email</span> <span class="n">app</span><span class="o">/</span><span class="n">models</span><span class="o">/</span><span class="n">organization</span><span class="o">.</span><span class="n">rb</span><span class="p">:</span><span class="mi">159</span>
+<span class="mi">17</span><span class="o">.</span><span class="mi">4</span><span class="p">:</span> <span class="no">Category</span><span class="o">::</span><span class="n">seed</span> <span class="n">app</span><span class="o">/</span><span class="n">models</span><span class="o">/</span><span class="n">category</span><span class="o">.</span><span class="n">rb</span><span class="p">:</span><span class="mi">12</span>
+<span class="mi">17</span><span class="o">.</span><span class="mi">0</span><span class="p">:</span> <span class="no">Organization</span><span class="c1">#update_attributes_with_admin app/models/organization.rb:50</span>
+<span class="mi">16</span><span class="o">.</span><span class="mi">9</span><span class="p">:</span> <span class="no">OrganizationsController</span><span class="c1">#destroy app/controllers/organizations_controller.rb:82</span>
+<span class="mi">16</span><span class="o">.</span><span class="mi">2</span><span class="p">:</span> <span class="no">ApplicationHelper</span><span class="c1">#smart_truncate app/helpers/application_helper.rb:3</span>
+<span class="mi">15</span><span class="o">.</span><span class="mi">3</span><span class="p">:</span> <span class="no">Organization</span><span class="c1">#remove_errors_with_address app/models/organization.rb:192</span>
+<span class="mi">14</span><span class="o">.</span><span class="mi">7</span><span class="p">:</span> <span class="no">Address</span><span class="c1">#parse app/models/address.rb:3</span>
+<span class="mi">14</span><span class="o">.</span><span class="mi">3</span><span class="p">:</span> <span class="no">CSVHeader</span><span class="c1">#method_missing app/models/csv_header.rb:23</span>
+<span class="mi">13</span><span class="o">.</span><span class="mi">9</span><span class="p">:</span> <span class="no">Organization</span><span class="o">::</span><span class="n">import</span> <span class="n">app</span><span class="o">/</span><span class="n">models</span><span class="o">/</span><span class="n">organization</span><span class="o">.</span><span class="n">rb</span><span class="p">:</span><span class="mi">137</span>
+<span class="mi">13</span><span class="o">.</span><span class="mi">8</span><span class="p">:</span> <span class="no">Organization</span><span class="c1">#generate_potential_user app/models/organization.rb:175</span>
+<span class="mi">13</span><span class="o">.</span><span class="mi">6</span><span class="p">:</span> <span class="no">OrganizationsController</span><span class="c1">#create app/controllers/organizations_controller.rb:51</span>
+<span class="mi">12</span><span class="o">.</span><span class="mi">9</span><span class="p">:</span> <span class="no">ApplicationController</span><span class="c1">#after_sign_in_path_for app/controllers/application_controller.rb:24</span>
+<span class="mi">12</span><span class="o">.</span><span class="mi">5</span><span class="p">:</span> <span class="no">ContributorsController</span><span class="c1">#show app/controllers/contributors_controller.rb:6</span>
+<span class="mi">12</span><span class="o">.</span><span class="mi">3</span><span class="p">:</span> <span class="no">OrganizationsController</span><span class="c1">#show app/controllers/organizations_controller.rb:29</span>
+</code></pre></div>
+<p>So first of all; what does flog do? <em>Flog reports the most tortured code in an easy to read pain report. The higher the score, the more pain the code is in.</em> So pain, we don&#39;t like that we prefer pleasure above pain of course. So how is this report affecting my pleasure. I would like to add as much features as I can and from time to time the code do some resistance and that&#39;s what stop me for finishing 3 features a day. So what can I do about it?</p>
+
+<p>My rule of thumb is just to try to keep the numbers in the left side of the report as low as 10; if there&#39;s something above that number probably it&#39;s needs a check. As flog is reporting on single methods is easier to just pick one and try to get it in better shape. Let&#39;s start with the first one the application_controller.rb in line 6: </p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="err"> </span><span class="k">def</span> <span class="nf">store_location</span>
+<span class="err">    </span><span class="c1"># store last url - this is needed for post-login redirect to whatever the user last visited.</span>
+<span class="err">    </span><span class="n">sign_in</span> <span class="o">=</span> <span class="no">Regexp</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;/users/sign_in&#39;</span>
+<span class="err">    </span><span class="n">sign_up</span> <span class="o">=</span> <span class="no">Regexp</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;/users/sign_up&#39;</span>
+<span class="err">    </span><span class="n">sign_password</span> <span class="o">=</span> <span class="no">Regexp</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;/users/password&#39;</span>
+<span class="err">    </span><span class="n">user_confirmation</span> <span class="o">=</span> <span class="no">Regexp</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;/users/confirmation&#39;</span>
+<span class="err">    </span><span class="n">cookies_allow</span> <span class="o">=</span> <span class="no">Regexp</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;/cookies/allow&#39;</span>
+<span class="err">    </span><span class="k">unless</span> <span class="p">(</span><span class="n">sign_in</span> <span class="o">=~</span> <span class="n">request</span><span class="o">.</span><span class="n">path</span> <span class="o">||</span>
+<span class="err">        </span><span class="n">sign_up</span> <span class="o">=~</span> <span class="n">request</span><span class="o">.</span><span class="n">path</span> <span class="o">||</span>
+<span class="err">        </span><span class="n">user_confirmation</span> <span class="o">=~</span> <span class="n">request</span><span class="o">.</span><span class="n">path</span> <span class="o">||</span>
+<span class="err">        </span><span class="n">sign_password</span> <span class="o">=~</span> <span class="n">request</span><span class="o">.</span><span class="n">path</span> <span class="o">||</span>
+<span class="err">        </span><span class="n">cookies_allow</span> <span class="o">=~</span> <span class="n">request</span><span class="o">.</span><span class="n">path</span> <span class="o">||</span>
+<span class="err">        </span><span class="n">request</span><span class="o">.</span><span class="n">xhr?</span><span class="p">)</span> <span class="c1"># don&#39;t store ajax calls</span>
+<span class="err">      </span><span class="n">session</span><span class="o">[</span><span class="ss">:previous_url</span><span class="o">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">path</span>
+<span class="err">    </span><span class="k">end</span>
+<span class="err">  </span><span class="k">end</span>
+</code></pre></div>
+<p>Pretty long method in my honest opinion; so what can we do about it. Well <a href="http://sourcemaking.com/refactoring/long-method">Long Method</a> is a code smell and normally what I do is to just extract more smaller methods, here is the final code: </p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">def</span><span class="err"> </span><span class="n">store_location</span>
+<span class="err">    </span><span class="c1"># store last url - this is needed for post-login redirect to whatever the user last visited.</span>
+<span class="err">    </span><span class="n">sign_up</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="no">Regexp</span><span class="o">.</span><span class="n">new</span><span class="err"> </span><span class="s1">&#39;/users/sign_up&#39;</span>
+<span class="err">    </span><span class="n">sign_password</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="no">Regexp</span><span class="o">.</span><span class="n">new</span><span class="err"> </span><span class="s1">&#39;/users/password&#39;</span>
+<span class="err">    </span><span class="n">user_confirmation</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="no">Regexp</span><span class="o">.</span><span class="n">new</span><span class="err"> </span><span class="s1">&#39;/users/confirmation&#39;</span>
+<span class="err">    </span><span class="n">cookies_allow</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="no">Regexp</span><span class="o">.</span><span class="n">new</span><span class="err"> </span><span class="s1">&#39;/cookies/allow&#39;</span>
+<span class="err">    </span><span class="k">unless</span><span class="err"> </span><span class="p">(</span><span class="n">sign_in</span><span class="err"> </span><span class="o">=~</span><span class="err"> </span><span class="n">request</span><span class="o">.</span><span class="n">path</span><span class="err"> </span><span class="o">||</span>
+<span class="err">        </span><span class="n">sign_up</span><span class="err"> </span><span class="o">=~</span><span class="err"> </span><span class="n">request</span><span class="o">.</span><span class="n">path</span><span class="err"> </span><span class="o">||</span>
+<span class="err">        </span><span class="n">user_confirmation</span><span class="err"> </span><span class="o">=~</span><span class="err"> </span><span class="n">request</span><span class="o">.</span><span class="n">path</span><span class="err"> </span><span class="o">||</span>
+<span class="err">        </span><span class="n">sign_password</span><span class="err"> </span><span class="o">=~</span><span class="err"> </span><span class="n">request</span><span class="o">.</span><span class="n">path</span><span class="err"> </span><span class="o">||</span>
+<span class="err">        </span><span class="n">cookies_allow</span><span class="err"> </span><span class="o">=~</span><span class="err"> </span><span class="n">request</span><span class="o">.</span><span class="n">path</span><span class="err"> </span><span class="o">||</span>
+<span class="err">        </span><span class="n">request</span><span class="o">.</span><span class="n">xhr?</span><span class="p">)</span><span class="err"> </span><span class="c1"># don&#39;t store ajax calls</span>
+<span class="err">      </span><span class="n">session</span><span class="o">[</span><span class="ss">:previous_url</span><span class="o">]</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="n">request</span><span class="o">.</span><span class="n">path</span>
+<span class="err">    </span><span class="k">end</span>
+<span class="err">  </span><span class="k">end</span>
+
+<span class="kp">private</span><span class="err"> </span>
+<span class="k">def</span> <span class="nf">sign_in</span>
+<span class="err"> </span> <span class="err"> </span><span class="no">Regexp</span><span class="o">.</span><span class="n">new</span><span class="err"> </span><span class="s1">&#39;/users/sign_in&#39;</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>Basic stuff; I just used the <a href="http://sourcemaking.com/refactoring/replace-temp-with-query">Replace temp with query method</a> refactor. Of course I needed to reran my specs so I did and found this: </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Devise::SessionsController POST create non-admins associated with nothing LOGS IN redirects to home page after non-admin associated with nothing logs-in
+Failure/Error: post :create, &#39;user&#39; =&gt; {&#39;email&#39; =&gt; &#39;example@example.com&#39;, &#39;password&#39; =&gt; &#39;pppppppp&#39;}
+ArgumentError:
+wrong number of arguments (2 for 0)
+# ./app/controllers/application_controller.rb:60:in `sign_in&#39;
+# ./spec/controllers/sessions_controller_spec.rb:57:in `block (5 levels) in &lt;top (required)&gt;&#39;
+</code></pre></div>
+<p>NOOO!!!, so I broke the test suite. What I did at this moment was just to rename the extracted method to another name and then all went green again. Good stuff; so let&#39;s see what flog says about this refactor: </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">814.0: flog total
+8.1: flog/method average
+
+60.9: main#none
+36.3: ApplicationController#store_location app/controllers/application_controller.rb:6
+</code></pre></div>
+<p>What? I did an extract method and I got a higher flog number why is this? I start to feel pain and confirm the slogan for flog. So I went ahead and extract all the others temp variables from it: </p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">store_location</span>
+<span class="err">    </span> <span class="c1"># store last url - this is needed for post-login redirect to whatever the user last visited.</span>
+<span class="err">    </span> <span class="k">unless</span> <span class="p">(</span><span class="n">sign_in_url</span> <span class="o">=~</span> <span class="n">request</span><span class="o">.</span><span class="n">path</span> <span class="o">||</span>
+<span class="err">    </span> <span class="err">    </span> <span class="n">sign_up_url</span> <span class="o">=~</span> <span class="n">request</span><span class="o">.</span><span class="n">path</span> <span class="o">||</span>
+<span class="err">    </span> <span class="err">    </span> <span class="n">user_confirmation</span> <span class="o">=~</span> <span class="n">request</span><span class="o">.</span><span class="n">path</span> <span class="o">||</span>
+<span class="err">    </span> <span class="err">    </span> <span class="n">sign_password</span> <span class="o">=~</span> <span class="n">request</span><span class="o">.</span><span class="n">path</span> <span class="o">||</span>
+<span class="err">    </span> <span class="err">    </span> <span class="n">cookies_allow</span> <span class="o">=~</span> <span class="n">request</span><span class="o">.</span><span class="n">path</span> <span class="o">||</span>
+<span class="err">    </span> <span class="err">    </span> <span class="n">request</span><span class="o">.</span><span class="n">xhr?</span><span class="p">)</span> <span class="c1"># don&#39;t store ajax calls</span>
+<span class="err">    </span> <span class="err">    </span> <span class="n">session</span><span class="o">[</span><span class="ss">:previous_url</span><span class="o">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">path</span>
+<span class="err">    </span> <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="kp">private</span>
+<span class="k">def</span> <span class="nf">sign_in_url</span>
+<span class="err">    </span> <span class="no">Regexp</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;/users/sign_in&#39;</span>
+<span class="k">end</span>
+<span class="err"> </span>
+<span class="k">def</span> <span class="nf">sign_up_url</span>
+<span class="err">    </span> <span class="no">Regexp</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;/users/sign_up&#39;</span>
+<span class="k">end</span>
+<span class="err"> </span>
+<span class="k">def</span> <span class="nf">sign_password</span>
+<span class="err">    </span> <span class="no">Regexp</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;/users/password&#39;</span>
+<span class="k">end</span>
+<span class="err"> </span>
+<span class="k">def</span> <span class="nf">user_confirmation</span>
+<span class="err">    </span> <span class="no">Regexp</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;/users/confirmation&#39;</span>
+<span class="k">end</span>
+<span class="err"> </span>
+<span class="k">def</span> <span class="nf">cookies_allow</span>
+<span class="err">    </span> <span class="no">Regexp</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;/cookies/allow&#39;</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>Flog?</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">814.0: flog total
+8.1: flog/method average
+
+60.9: main#none
+37.4: ApplicationController#store_location app/controllers/application_controller.rb:6
+</code></pre></div>
+<p>And then I cried. When I stopped just hitting my head I went to Flog&#39;s site again and read a little bit. Flog is a complexity metric tool; and the temp&#39;s did not have any type of complexity the fact that I put the temp&#39;s values in another place just increase the visibility for flog on that method for the real problem. The conditional stuff was the real problem; so I refactor that out also: </p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">store_location</span>
+<span class="c1"># store last url - this is needed for post-login redirect to whatever the user last visited.</span>
+<span class="err">    </span> <span class="k">unless</span> <span class="p">(</span><span class="n">request_path_includes?</span><span class="p">(</span><span class="n">sign_in_url</span><span class="p">)</span> <span class="o">||</span>
+<span class="err">    </span> <span class="err">    </span> <span class="n">request_path_includes?</span><span class="p">(</span><span class="n">sign_up_url</span><span class="p">)</span> <span class="o">||</span>
+<span class="err">    </span> <span class="err">    </span> <span class="n">request_path_includes?</span><span class="p">(</span><span class="n">user_confirmation</span><span class="p">)</span> <span class="o">||</span>
+<span class="err">    </span> <span class="err">    </span> <span class="n">request_path_includes?</span><span class="p">(</span><span class="n">sign_password</span><span class="p">)</span> <span class="o">||</span>
+<span class="err">    </span> <span class="err">    </span> <span class="n">request_path_includes?</span><span class="p">(</span><span class="n">cookies_allow</span><span class="p">)</span> <span class="o">||</span>
+<span class="err">    </span> <span class="err">    </span> <span class="n">request</span><span class="o">.</span><span class="n">xhr?</span><span class="p">)</span> <span class="c1"># don&#39;t store ajax calls</span>
+<span class="err">    </span> <span class="err">    </span> <span class="n">session</span><span class="o">[</span><span class="ss">:previous_url</span><span class="o">]</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">path</span>
+<span class="err">    </span> <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="kp">private</span><span class="err"> </span>
+<span class="o">.</span><span class="n">.</span><span class="o">.</span>
+
+<span class="k">def</span> <span class="nf">request_path_includes?</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="err"> </span> <span class="n">url</span> <span class="o">=~</span> <span class="n">request</span><span class="o">.</span><span class="n">path</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>Flog?</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">21.9: ApplicationController#store_location app/controllers/application_controller.rb:6
+</code></pre></div>
+<p>And the happiness and pleasure came back. </p>
+
+<h2>Conclusion</h2>
+
+<p>Probably another person would spot the exact problem from the start; but the extraction of the temps to particular methods gave me a better glance of the entire code structure and help me figure it out the best way to compose the other method. I don&#39;t think Code Climate is a bad tool but sometimes we need to check deeper and with others tools to keep getting our code base in shape. I hope this article helps you folks to keep getting your code in shape and just don&#39;t felt into the trap of Code Climate&#39;s high GPA :-P </p>
+
+  </article>
+
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'coredio'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+</div>
+
+
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Black Matter</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li>Black Matter</li>
+          <li><a href="mailto:george.rafael@gmail.com">george.rafael@gmail.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/cored">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">cored</span>
+            </a>
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/cor3d">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+                </svg>
+              </span>
+
+              <span class="username">cor3d</span>
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">Rambling about web development in particular, programming in general, philosophy on  the side and everything else in the middle.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>
