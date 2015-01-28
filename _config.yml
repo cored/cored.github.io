@@ -9,7 +9,7 @@ url: "http://cored.github.io" # the base hostname & protocol for your site
 twitter_username: cor3d
 github_username:  cored
 permalink: /blog/:year/:month/:day/:title
-pagination: 5
+paginate: 5
 
 # Build settings
 markdown: redcarpet
