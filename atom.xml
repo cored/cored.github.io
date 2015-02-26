@@ -4,7 +4,7 @@
  <title>Black Matter</title>
  <link href="http://cored.github.ioatom.xml" rel="self"/>
  <link href="http://cored.github.io"/>
- <updated>2015-01-12T21:48:51-05:00</updated>
+ <updated>2015-02-26T11:17:01-04:00</updated>
  <id>http://cored.github.io</id>
  <author>
    <name></name>
@@ -13,9 +13,300 @@
 
  
  <entry>
+   <title>Service Objects in Rails</title>
+   <link href="http://cored.github.io/blog/2015/02/26/service-objects-in-rails"/>
+   <updated>2015-02-26T11:07:01-04:00</updated>
+   <id>http://cored.github.io/blog/2015/02/26/service-objects-in-rails</id>
+   <content type="html">&lt;p&gt;TLDR; &lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Service Layer to represent a domain-oriented layer of behaviors that provide
+an API for the domain layer.&lt;/em&gt; - Martin Fowler&lt;/p&gt;
+
+&lt;p&gt;There&amp;#39;s been a lot of talk about service objects in Rails; &lt;a href=&quot;http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/&quot;&gt;Code Climate&lt;/a&gt;, &lt;a href=&quot;https://www.agileplannerapp.com/blog/building-agile-planner/refactoring-with-hexagonal-rails&quot;&gt;Hexagonal Rails&lt;/a&gt; and many others places.
+This post goal is to try to centralize as much info as I can from the research
+that I&amp;#39;ve been making with this type of approach in Rails applications.&lt;/p&gt;
+
+&lt;p&gt;Some people say there are different flavors of service objects; what I normally
+suggest is that you need to follow the principles as much as possible. For
+instance following &lt;a href=&quot;http://en.wikipedia.org/wiki/Single_responsibility_principle&quot;&gt;SRP&lt;/a&gt; will lead you to a proper separation of concerns between
+your business logic and the framework around it.&lt;/p&gt;
+
+&lt;p&gt;The following are the different approaches that people tend to use when
+implementing service objects in Rails:&lt;/p&gt;
+
+&lt;p&gt;I will use one action from a controller within the project &lt;a href=&quot;https://github.com/DefactoSoftware/Hours&quot;&gt;Hours&lt;/a&gt;.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CategoriesController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicatoinController&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@category&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category_params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;categories_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;notice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:category_created&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+      &lt;span class=&quot;vi&quot;&gt;@categories&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;by_name&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;categories/index&amp;quot;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Refactoring: Some people implement service objects like this&lt;/h2&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CategoryService&lt;/span&gt;
+  &lt;span class=&quot;kp&quot;&gt;attr_reader&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:categories&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:category&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category_params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@category&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category_params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+      &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+      &lt;span class=&quot;vi&quot;&gt;@categories&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;by_name&lt;/span&gt;
+      &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CategoriesController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;# ...&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;category_service&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;CategoryService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;category_service&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category_params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+     &lt;span class=&quot;vi&quot;&gt;@category&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;category_service&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;
+     &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;categories_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;notice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:category_created&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+     &lt;span class=&quot;vi&quot;&gt;@categories&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;category_service&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;categories&lt;/span&gt;
+     &lt;span class=&quot;vi&quot;&gt;@category&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;category_service&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;
+     &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;categories/index&amp;quot;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;# ...&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;Advantages&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Test in isolation&lt;/li&gt;
+&lt;li&gt;The controller doesn&amp;#39;t interact directly with persistence logic&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1&gt;Disadvantages&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Coupling between the controller and the service&lt;/li&gt;
+&lt;li&gt;The controller still makes decisions based on the service state&lt;/li&gt;
+&lt;li&gt;Breaks &amp;quot;Tell, don&amp;#39;t ask&amp;quot;&lt;/li&gt;
+&lt;li&gt;We are making decisions in two different places&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;Refactoring: Matt Wynne - Hexagonal Rails way&lt;/h2&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CategoryService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Struct&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:listener&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;n&quot;&gt;category&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;listener&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create_on_success&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;listener&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create_on_failure&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;no&quot;&gt;Category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;by_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CategoriesController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+   &lt;span class=&quot;vi&quot;&gt;@category&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;CategoryService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category_params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create_on_success&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;vi&quot;&gt;@category&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;
+   &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;categories_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;notice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:category_created&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create_on_failure&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;categories&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;vi&quot;&gt;@category&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;
+   &lt;span class=&quot;vi&quot;&gt;@categories&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;categories&lt;/span&gt;
+   &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;categories/index&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;Advantages&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;There is no more decision making in the controller based on the service state&lt;/li&gt;
+&lt;li&gt;Reduce coupling&lt;/li&gt;
+&lt;li&gt;The business logic is now part of a well define object&lt;/li&gt;
+&lt;li&gt;Proper encapsulation of data inside the service.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1&gt;Disadvantages&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Most controllers have more than one action in it; so you will need to write
+two new public methods for each action.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;Side note&lt;/h3&gt;
+
+&lt;p&gt;You could always use &lt;a href=&quot;https://github.com/jonleighton/focused_controller&quot;&gt;one action per conroller&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2&gt;Refactoring: Using lambdas instead of explicit method definitions&lt;/h2&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CategoryService&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;vi&quot;&gt;@category_params&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;success&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;failure&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:)&lt;/span&gt;
+   &lt;span class=&quot;n&quot;&gt;category&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;success&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;failure&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;by_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;kp&quot;&gt;private&lt;/span&gt;
+
+  &lt;span class=&quot;kp&quot;&gt;attr_reader&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:category_params&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CategoriesController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+   &lt;span class=&quot;no&quot;&gt;CategoryService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category_params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+   &lt;span class=&quot;ss&quot;&gt;success&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@category&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;categories_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;notice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:category_created&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+   &lt;span class=&quot;ss&quot;&gt;failure&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;categories&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@category&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@categories&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;categories&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;categories/index&amp;quot;&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+   &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;Advantages&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Every single advantage of the prior refactorings&lt;/li&gt;
+&lt;li&gt;Do not pollute the public API of the controller&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1&gt;Disadvantages&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Is not that good for code that runs independently of whatever it&amp;#39;s happening
+at the moment of action execution; eg. logging; analytics.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;Refactoring: Using the wisper gem for service definition&lt;/h2&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CategoryService&lt;/span&gt;
+  &lt;span class=&quot;kp&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Wisper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Publisher&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;n&quot;&gt;category&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;broadcast&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:category_created_successfully&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;broadcast&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:category_created_unsuccessfully&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;by_name&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CategoriesController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+   &lt;span class=&quot;n&quot;&gt;category_service&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;CategoryService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;
+
+   &lt;span class=&quot;n&quot;&gt;category_service&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:category_created_successfully&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@category&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;categories_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;notice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:category_created&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+   &lt;span class=&quot;n&quot;&gt;category_service&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:category_created_unsuccessfully&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;categories&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@category&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@categories&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;categories&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;categories/index&amp;quot;&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+   &lt;span class=&quot;n&quot;&gt;category_service&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category_params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;Advantages&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Every single advantage of the other refactorings&lt;/li&gt;
+&lt;li&gt;Easier to compose orthogonal behavior; for instance:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CategoriesController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+   &lt;span class=&quot;n&quot;&gt;category_service&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;CategoryService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;
+   &lt;span class=&quot;n&quot;&gt;category_service&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subscribe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;LoggingListener&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+   &lt;span class=&quot;n&quot;&gt;category_service&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:category_created_successfully&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@category&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;categories_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;notice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:category_created&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+   &lt;span class=&quot;n&quot;&gt;category_service&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:category_created_unsuccessfully&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;categories&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@category&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@categories&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;categories&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;categories/index&amp;quot;&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+   &lt;span class=&quot;n&quot;&gt;category_service&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category_params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CategoryService&lt;/span&gt;
+  &lt;span class=&quot;kp&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Wisper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Publisher&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;n&quot;&gt;category&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;n&quot;&gt;broadcast&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;broadcast&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:category_created_successfully&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;broadcast&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:category_created_unsuccessfully&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;category&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;by_name&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LoggingListener&lt;/span&gt;
+ &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;entity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Info: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;entity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;inspect&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
+ &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;Adheres to the &lt;a href=&quot;http://en.wikipedia.org/wiki/Open/closed_principle&quot;&gt;Open/Closed principle&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1&gt;Disadvantages&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Team adoption&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;Summary&lt;/h2&gt;
+
+&lt;p&gt;At first sight people don&amp;#39;t see the benefits of extracting service objects in
+their Rails application and tend to think this is over engineering but having
+proper place for individual functionality help us with the maintainability and
+extensibility of the code. When you have several smaller objects in a system
+it&amp;#39;s easier to resonate about those smaller pieces than bigger ones.&lt;/p&gt;
+
+&lt;h2&gt;Resources&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=CGN4RFkhH2M&quot;&gt;Hexagonal Rails&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=tg5RFeSfBM4&quot;&gt;Decoupling from Rails&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.windycityrails.org/videos/2014/#6&quot;&gt;Domain Driven Rails&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+ </entry>
+ 
+ <entry>
    <title>How to Identify More Than One Level of Abstraction in a Method</title>
    <link href="http://cored.github.io/blog/2015/01/12/how-to-identify-more-than-one-level-of-abstraction-in-a-method"/>
-   <updated>2015-01-12T21:46:03-05:00</updated>
+   <updated>2015-01-12T22:46:03-04:00</updated>
    <id>http://cored.github.io/blog/2015/01/12/how-to-identify-more-than-one-level-of-abstraction-in-a-method</id>
    <content type="html">&lt;p&gt;Here is the spec: &lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;context&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;when the access token has expired&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
@@ -84,7 +375,7 @@ for my next set of refactoring for this code.  &lt;/p&gt;
  <entry>
    <title>Picking the Language of the Year</title>
    <link href="http://cored.github.io/blog/2015/01/11/picking-the-language-of-the-year"/>
-   <updated>2015-01-11T18:41:31-05:00</updated>
+   <updated>2015-01-11T19:41:31-04:00</updated>
    <id>http://cored.github.io/blog/2015/01/11/picking-the-language-of-the-year</id>
    <content type="html">&lt;p&gt;I don&amp;#39;t need to become an expert just expose myself to new ideas. But one of the issues 
 of learning something new when there are so many options is to know which
@@ -109,7 +400,7 @@ it - &lt;a href=&quot;https://pragprog.com/book/btlang/seven-languages-in-seven-
  <entry>
    <title>In the Year 2014</title>
    <link href="http://cored.github.io/blog/2014/12/31/in-the-year-2014"/>
-   <updated>2014-12-31T13:55:01-05:00</updated>
+   <updated>2014-12-31T14:55:01-04:00</updated>
    <id>http://cored.github.io/blog/2014/12/31/in-the-year-2014</id>
    <content type="html">&lt;p&gt;2014 was a year in which I learned and discovered a lot of things, not just in
 the professional realm but in the personal too.&lt;/p&gt;
@@ -2013,7 +2304,7 @@ with better explanation. &lt;/p&gt;
  <entry>
    <title>Another refactoring story</title>
    <link href="http://cored.github.io/blog/2014/02/24/another-refactoring-story"/>
-   <updated>2014-02-24T16:30:00-05:00</updated>
+   <updated>2014-02-24T16:30:00-04:00</updated>
    <id>http://cored.github.io/blog/2014/02/24/another-refactoring-story</id>
    <content type="html">&lt;p&gt;TLDR; Keeping with the refactoring stories started with &lt;a href=&quot;http://cored.github.io/blog/2014/02/19/my-gpa-at-code-climate-is-3-dot-59-a-refactoring-story/&quot;&gt;My GPA in Code Climate is 3.59: A Refactoring Story&lt;/a&gt; I decided today to get a piece of code as much in shape as my knowledge let me, of course I&amp;#39;m always waiting for suggestions on how to improve so please do leave comments. &lt;/p&gt;
 
@@ -2363,7 +2654,7 @@ with better explanation. &lt;/p&gt;
  <entry>
    <title>My GPA at Code Climate is 3.59: A refactoring story</title>
    <link href="http://cored.github.io/blog/2014/02/19/my-gpa-at-code-climate-is-3-dot-59-a-refactoring-story"/>
-   <updated>2014-02-19T10:55:00-05:00</updated>
+   <updated>2014-02-19T10:55:00-04:00</updated>
    <id>http://cored.github.io/blog/2014/02/19/my-gpa-at-code-climate-is-3-dot-59-a-refactoring-story</id>
    <content type="html">&lt;p&gt;What does that title suppose to mean? Yes that&amp;#39;s a very outstanding number I saw that today in a project that I&amp;#39;m working on &lt;a href=&quot;http://github.com/tansaku/LocalSupport&quot;&gt;LocalSupport&lt;/a&gt;. But then I just went to the code and use &lt;a href=&quot;https://github.com/seattlerb/flog&quot;&gt;Flog&lt;/a&gt; and I found this: &lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;mi&quot;&gt;814&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;flog&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;total&lt;/span&gt;
@@ -2526,7 +2817,7 @@ wrong number of arguments (2 for 0)
  <entry>
    <title>What to refactor?</title>
    <link href="http://cored.github.io/blog/2014/02/17/what-to-refactor"/>
-   <updated>2014-02-17T17:18:00-05:00</updated>
+   <updated>2014-02-17T17:18:00-04:00</updated>
    <id>http://cored.github.io/blog/2014/02/17/what-to-refactor</id>
    <content type="html">&lt;p&gt;I receive this question the other day by a friend at that moment I realize that I&amp;#39;ve never thought about it. How do I know where to start when refactoring? And how do I know is the right time? The second question is a little bit obvious the right time is any time. Refactoring is the art of getting your code in shape and you should be doing it often; but the first one is a little bit trickier and I will try to share some tips to consider when you are doing this skill. &lt;/p&gt;
 
@@ -2580,7 +2871,7 @@ wrong number of arguments (2 for 0)
  <entry>
    <title>Jobs Interview - More Ruby, Rails questions and answers</title>
    <link href="http://cored.github.io/blog/2014/02/12/jobs-interview-more-ruby"/>
-   <updated>2014-02-12T12:07:00-05:00</updated>
+   <updated>2014-02-12T12:07:00-04:00</updated>
    <id>http://cored.github.io/blog/2014/02/12/jobs-interview-more-ruby</id>
    <content type="html">&lt;p&gt;Following my series on job interviews which started here &lt;a href=&quot;http://cored.github.io/blog/2013/10/29/rails-job-interview-qa/&quot;&gt;Job Interview - Rails Main Components&lt;/a&gt; This post will have new questions. Hopefully some people will learn a few things, at least I did. Without further ado the questions and answers; enjoy!. &lt;/p&gt;
 
@@ -2676,7 +2967,7 @@ greeter.method(:greeting).call
  <entry>
    <title>If you are going to isolate from Rails why not ditch Rails?</title>
    <link href="http://cored.github.io/blog/2014/02/10/if-you-are-going-to-isolate-from-rails-why-not-ditch-rails"/>
-   <updated>2014-02-10T18:59:00-05:00</updated>
+   <updated>2014-02-10T18:59:00-04:00</updated>
    <id>http://cored.github.io/blog/2014/02/10/if-you-are-going-to-isolate-from-rails-why-not-ditch-rails</id>
    <content type="html">&lt;p&gt;This was an question that &lt;a href=&quot;http://github.com/gotjosh&quot;&gt;@gotjosh&lt;/a&gt; asked me today and is a very valid one. But first let me give you some background on the discussion. &lt;/p&gt;
 
@@ -2701,7 +2992,7 @@ greeter.method(:greeting).call
  <entry>
    <title>Why is strong parameters better than other methods?</title>
    <link href="http://cored.github.io/blog/2014/02/07/why-is-strong-parameters-better-than-other-methods"/>
-   <updated>2014-02-07T14:39:00-05:00</updated>
+   <updated>2014-02-07T14:39:00-04:00</updated>
    <id>http://cored.github.io/blog/2014/02/07/why-is-strong-parameters-better-than-other-methods</id>
    <content type="html">&lt;p&gt;Before answering this question, we first need to know what is strong parameters and before that we need to know what is mass assignment. &lt;/p&gt;
 
@@ -2753,7 +3044,7 @@ Require doesn&amp;#39;t permit thought, you should use it in combination with pe
  <entry>
    <title>Starting a project by myself</title>
    <link href="http://cored.github.io/blog/2014/01/31/starting-a-project-by-myself"/>
-   <updated>2014-01-31T10:55:00-05:00</updated>
+   <updated>2014-01-31T10:55:00-04:00</updated>
    <id>http://cored.github.io/blog/2014/01/31/starting-a-project-by-myself</id>
    <content type="html">&lt;p&gt;It&amp;#39;s been a long time seems I started a project by myself. For me it&amp;#39;s important to have something to play with a side project to keep making progress apart from whatever you do for work. That&amp;#39;s why I decided to start working a Rails project; just because that&amp;#39;s what I normally work with and I think I can keep pushing it to test others technologies around it like. &lt;a href=&quot;http://angularjs.org/&quot;&gt;Angular.JS&lt;/a&gt; or &lt;a href=&quot;http://www.ember.js&quot;&gt;Emeber.JS&lt;/a&gt;. The project I decided to work on is a job board based on an old tutorial from the &lt;a href=&quot;http://symfony.com/&quot;&gt;Symfony Framework&lt;/a&gt; &lt;a href=&quot;http://symfony.com/legacy/doc/jobeet/1_2?orm=Propel&quot;&gt;Jobeet Tutorial&lt;/a&gt;. I did a little bit of analysis to confirm the assumptions from the developers about which feature to pick first and such and such. I&amp;#39;ve been taking other directions with my coding thought I won&amp;#39;t be using exactly the same thing as they did obviously the development stack will be different; I just picked up the user stories created a project &lt;a href=&quot;http://github.com/cored/jobo&quot;&gt;Jobo&lt;/a&gt; and add some issues to follow alone. I&amp;#39;m using &lt;a href=&quot;http://github.com/thoughtbot/suspenders&quot;&gt;Suspenders&lt;/a&gt; as my default template for this app just for testing purpose. I will try to finish this project in a month just the key features that I have from there and up will be more experimentation regarding other technologies and increasing the quality of the code. I encourage anyone who wants to join me to do it. I&amp;#39;ll be adding a wiki page with some of the assumptions and things I do while developing Rails apps so I can share it with others and discuss not every time I will be right ;-)&lt;/p&gt;
 
@@ -2764,7 +3055,7 @@ Require doesn&amp;#39;t permit thought, you should use it in combination with pe
  <entry>
    <title>Why I think some projects fail?</title>
    <link href="http://cored.github.io/blog/2014/01/30/why-i-think-some-projects-fail"/>
-   <updated>2014-01-30T10:22:00-05:00</updated>
+   <updated>2014-01-30T10:22:00-04:00</updated>
    <id>http://cored.github.io/blog/2014/01/30/why-i-think-some-projects-fail</id>
    <content type="html">&lt;p&gt;The other day a friend of mine was talking regarding projects failures and stuffs and he asked for my opinion. Of course I&amp;#39;m not going to predict what is going to happen with all the projects you pretend to work on but I will make the case for a particular project that I&amp;#39;ve worked on and failed I will name this project &lt;strong&gt;FeetBook&lt;/strong&gt; because the name is catchy and the owner of the product did not know exactly what he want to do with it. I won&amp;#39;t describe what the project did because that&amp;#39;s irrelevant I will just describe what I think went wrong with it.&lt;/p&gt;
 
@@ -2789,7 +3080,7 @@ Require doesn&amp;#39;t permit thought, you should use it in combination with pe
  <entry>
    <title>Replace Rake with Thor... but why exactly?</title>
    <link href="http://cored.github.io/blog/2014/01/23/replace-rake-with-thor-dot-dot-dot-but-why-exactly"/>
-   <updated>2014-01-23T20:52:00-05:00</updated>
+   <updated>2014-01-23T20:52:00-04:00</updated>
    <id>http://cored.github.io/blog/2014/01/23/replace-rake-with-thor-dot-dot-dot-but-why-exactly</id>
    <content type="html">&lt;p&gt;I was reading the following article today &lt;a href=&quot;http://codecrate.com/2014/01/replace-rake-with-thor.html?utm_source=rubyweekly&amp;amp;utm_medium=email&quot;&gt;Replace Rake with Thor&lt;/a&gt; the author says the following:&lt;/p&gt;
 
@@ -2838,7 +3129,7 @@ isolation without any real issue.&lt;/p&gt;
  <entry>
    <title>#to_hash</title>
    <link href="http://cored.github.io/blog/2014/01/22/number-to-hash"/>
-   <updated>2014-01-22T22:03:00-05:00</updated>
+   <updated>2014-01-22T22:03:00-04:00</updated>
    <id>http://cored.github.io/blog/2014/01/22/number-to-hash</id>
    <content type="html">&lt;p&gt;How to transform all the instance variables from an object to a hash: &lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;def to_hash
@@ -2854,7 +3145,7 @@ end
  <entry>
    <title>First post of 2014 and new theme</title>
    <link href="http://cored.github.io/blog/2014/01/06/first-post-of-2014-and-new-theme"/>
-   <updated>2014-01-06T20:31:00-05:00</updated>
+   <updated>2014-01-06T20:31:00-04:00</updated>
    <id>http://cored.github.io/blog/2014/01/06/first-post-of-2014-and-new-theme</id>
    <content type="html">&lt;p&gt;Well this will be a quick one, I just switch to a new theme just because
 I think the blog diserve it. I&amp;#39;m kinda busy lately that&amp;#39;s why I&amp;#39;m not posting
@@ -2866,7 +3157,7 @@ and the new look ;-)&lt;/p&gt;
  <entry>
    <title>Lunch and Learn: Building a culture of code quality by Bryan Helmkamp</title>
    <link href="http://cored.github.io/blog/2013/12/19/lunch-and-learn-building-a-culture-of-code-quality-by-bryan-helmkamp"/>
-   <updated>2013-12-19T16:54:00-05:00</updated>
+   <updated>2013-12-19T16:54:00-04:00</updated>
    <id>http://cored.github.io/blog/2013/12/19/lunch-and-learn-building-a-culture-of-code-quality-by-bryan-helmkamp</id>
    <content type="html">&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;//www.youtube.com/embed/YCugeqQuzh4&quot;
 frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;
@@ -2936,7 +3227,7 @@ satisfaction at work ;-)&lt;/p&gt;
  <entry>
    <title>Lunch and Learn: Bad Ruby code doesn't exists by Matt Aimonetti</title>
    <link href="http://cored.github.io/blog/2013/12/10/lunch-and-learn-bad-ruby-code-doesnt-exists-by-matt-aimonetti"/>
-   <updated>2013-12-10T19:59:00-05:00</updated>
+   <updated>2013-12-10T19:59:00-04:00</updated>
    <id>http://cored.github.io/blog/2013/12/10/lunch-and-learn-bad-ruby-code-doesnt-exists-by-matt-aimonetti</id>
    <content type="html">&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;//www.youtube.com/embed/tVkQATR9P00&quot;
 frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;
@@ -2998,7 +3289,7 @@ it.&lt;/p&gt;
  <entry>
    <title>Is Github truly the new resume?</title>
    <link href="http://cored.github.io/blog/2013/11/21/is-github-truly-the-new-resume"/>
-   <updated>2013-11-21T13:09:00-05:00</updated>
+   <updated>2013-11-21T13:09:00-04:00</updated>
    <id>http://cored.github.io/blog/2013/11/21/is-github-truly-the-new-resume</id>
    <content type="html">&lt;p&gt;To be honest I was in that exact sort of religion. But is really Github our
 resume? How costly could be to a company to just rely on that part of
@@ -3035,7 +3326,7 @@ Twi.. ehem Github profile.&lt;/p&gt;
  <entry>
    <title>Struct as collection or not</title>
    <link href="http://cored.github.io/blog/2013/11/21/struct-as-collection-or-not"/>
-   <updated>2013-11-21T09:30:00-05:00</updated>
+   <updated>2013-11-21T09:30:00-04:00</updated>
    <id>http://cored.github.io/blog/2013/11/21/struct-as-collection-or-not</id>
    <content type="html">&lt;p&gt;One of the things I normally do when doing any kind of programming is to wrap
 every single data structure in my system in an object. Why you may ask? Well
@@ -3081,7 +3372,7 @@ just when is the right thing to do.&lt;/p&gt;
  <entry>
    <title>Rubyconf 2013 quick recap</title>
    <link href="http://cored.github.io/blog/2013/11/19/rubyconf-2013-quick-recap"/>
-   <updated>2013-11-19T12:30:00-05:00</updated>
+   <updated>2013-11-19T12:30:00-04:00</updated>
    <id>http://cored.github.io/blog/2013/11/19/rubyconf-2013-quick-recap</id>
    <content type="html">&lt;p&gt;This was my first Rubyconf and I&amp;#39;m planning not to make it the last one. It was
 a great experience and I suggest any one interesting in this fascinating
@@ -3612,7 +3903,7 @@ Rodriguez&lt;/a&gt; came with a good idea using modules
 and including the module logic within the controller; I just move it to a new
 class with just one action like the following:&lt;/p&gt;
 
-&lt;p&gt;&lt;script src=&quot;https://gist.github.com/cored/6599407.js&quot;&gt;&lt;/script&gt;&lt;/p&gt;
+&lt;script src=&quot;https://gist.github.com/cored/6599407.js&quot;&gt;&lt;/script&gt;
 
 &lt;p&gt;I think this is a better approach just because the controller that you are
 trying to remove logic from will end up with a lot of methods inside it and in
@@ -3685,7 +3976,7 @@ In fact I was trying to learn how to do a &lt;a href=&quot;http://en.wikipedia.o
 with Racket but my limited knowledge about that and about the language throw me
 to a different experiment. Bellow the code for it:&lt;/p&gt;
 
-&lt;p&gt;&lt;script src=&quot;https://gist.github.com/6523187.js&quot;&gt; &lt;/script&gt;&lt;/p&gt;
+&lt;script src=&quot;https://gist.github.com/6523187.js&quot;&gt; &lt;/script&gt;
 
 &lt;p&gt;This should be very self explanatory. What I like about this code is the
 concise that is about showing the intent of the code. Racket keeps surprising
@@ -3746,9 +4037,9 @@ actual feedback for this. &lt;/p&gt;
 &lt;p&gt;And without further ado here is the code I changed, first how I found the code
 and the following is how the code looks now.&lt;/p&gt;
 
-&lt;p&gt;&lt;script src=&quot;https://gist.github.com/6442675.js&quot;&gt; &lt;/script&gt;&lt;/p&gt;
+&lt;script src=&quot;https://gist.github.com/6442675.js&quot;&gt; &lt;/script&gt;
 
-&lt;p&gt;&lt;script src=&quot;https://gist.github.com/6442695.js&quot;&gt; &lt;/script&gt;&lt;/p&gt;
+&lt;script src=&quot;https://gist.github.com/6442695.js&quot;&gt; &lt;/script&gt;
 
 &lt;p&gt;What I did was just to remove the constant magic numbers and put it in it&amp;#39;s own
 method is a very simple refactor, but I think this is the way to go doing
