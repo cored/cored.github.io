@@ -24,7 +24,7 @@ implementing service objects in Rails:
 I will use one action from a controller within the project [Hours](https://github.com/DefactoSoftware/Hours).
 
 ```ruby
-class CategoriesController < ApplicatoinController
+class CategoriesController < ApplicationController
   def create
     @category = Category.new(category_params)
     if @category.save
