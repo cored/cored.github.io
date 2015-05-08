@@ -8,6 +8,32 @@
     <atom:link href="http://cored.github.io/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Paring Session: Adding roles to a Rails app</title>
+        <description>&lt;p&gt;The other day I decided to start doing something that &lt;a href=&quot;https://twitter.com/avdi&quot;&gt;Avdi Grimm&lt;/a&gt;
+is been doing for a long time now; pairing. I&amp;#39;m not doing it as a business
+thought just as a way for me to solidify my own knowledge and learn new things
+with interested people.&lt;/p&gt;
+
+&lt;p&gt;In my first session I did learn quite a few thing; but most of all I learned
+about my own way of understanding problems and explaining them to others. My
+pairing partner for this session have an application in which he wanted to add
+a role mechanism for managing administrator users and normal users; yes I know
+a lot of seasoned Rails developers would say &amp;quot;That&amp;#39;s easy man&amp;quot; and I agree but
+having the patience to explain the issue is another totally different
+challenge and even when I already did this in the past I learned some new
+library that I will check out like: &lt;a href=&quot;https://github.com/blowmage/minitest-rails-capybara&quot;&gt;minitest-rails-capybara&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This was a great experience and I will totally try to do it again; some of the
+things that I need to take into account is to coordinate the problem to work on
+before the actual session and also beware of different development
+environments. I&amp;#39;ll see what next week brings with this new experiments.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 07 May 2015 21:47:24 -0400</pubDate>
+        <link>http://cored.github.io/blog/2015/05/07/paring-session-adding-roles-to-a-rails-app</link>
+        <guid isPermaLink="true">http://cored.github.io/blog/2015/05/07/paring-session-adding-roles-to-a-rails-app</guid>
+      </item>
+    
+      <item>
         <title>Service Objects in Rails</title>
         <description>&lt;p&gt;TLDR; &lt;/p&gt;
 
@@ -27,7 +53,7 @@ your business logic and the framework around it.&lt;/p&gt;
 implementing service objects in Rails:&lt;/p&gt;
 
 &lt;p&gt;I will use one action from a controller within the project &lt;a href=&quot;https://github.com/DefactoSoftware/Hours&quot;&gt;Hours&lt;/a&gt;.&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CategoriesController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicatoinController&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CategoriesController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
     &lt;span class=&quot;vi&quot;&gt;@category&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;category_params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@category&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
@@ -767,95 +793,6 @@ know for sure. Anyways I think this was a fun kata for today; until next time.&l
         <pubDate>Thu, 14 Aug 2014 16:05:00 -0400</pubDate>
         <link>http://cored.github.io/blog/2014/08/14/a-kata-a-day-spin-words</link>
         <guid isPermaLink="true">http://cored.github.io/blog/2014/08/14/a-kata-a-day-spin-words</guid>
-      </item>
-    
-      <item>
-        <title>Code Read: Dotenv part 3</title>
-        <description>&lt;p&gt;This is the final post on reading Dotenv code which was quite fun and very
-insightful. Let me break it down into some smaller pieces. &lt;/p&gt;
-
-&lt;p&gt;TLDR;&lt;/p&gt;
-
-&lt;p&gt;I already cover the entry points now is the turn for the inner pieces of this
-project. &lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;dotenv/substitutions/variable&amp;#39;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;RUBY_VERSION&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;1.8.7&amp;#39;&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;dotenv/substitutions/command&amp;#39;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Dotenv&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;FormatError&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;SyntaxError&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-  &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Parser&lt;/span&gt;
-    &lt;span class=&quot;vc&quot;&gt;@@substitutions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Substitutions&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;constants&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;map&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;const&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Substitutions&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;const_get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;const&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;no&quot;&gt;LINE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/&lt;/span&gt;
-&lt;span class=&quot;sr&quot;&gt;      \A&lt;/span&gt;
-&lt;span class=&quot;sr&quot;&gt;      (?:export\s+)?    # optional export&lt;/span&gt;
-&lt;span class=&quot;sr&quot;&gt;      ([\w\.]+)         # key&lt;/span&gt;
-&lt;span class=&quot;sr&quot;&gt;      (?:\s*=\s*|:\s+?) # separator&lt;/span&gt;
-&lt;span class=&quot;sr&quot;&gt;      (                 # optional value begin&lt;/span&gt;
-&lt;span class=&quot;sr&quot;&gt;        &amp;#39;(?:\&amp;#39;|[^&amp;#39;])*&amp;#39;  #   single quoted value&lt;/span&gt;
-&lt;span class=&quot;sr&quot;&gt;        |               #   or&lt;/span&gt;
-&lt;span class=&quot;sr&quot;&gt;        &amp;quot;(?:\&amp;quot;|[^&amp;quot;])*&amp;quot;  #   double quoted value&lt;/span&gt;
-&lt;span class=&quot;sr&quot;&gt;        |               #   or&lt;/span&gt;
-&lt;span class=&quot;sr&quot;&gt;        [^#\n]+         #   unquoted value&lt;/span&gt;
-&lt;span class=&quot;sr&quot;&gt;      )?                # value end&lt;/span&gt;
-&lt;span class=&quot;sr&quot;&gt;      (?:\s*\#.*)?      # optional comment&lt;/span&gt;
-&lt;span class=&quot;sr&quot;&gt;      \z&lt;/span&gt;
-&lt;span class=&quot;sr&quot;&gt;    /x&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;kp&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;call&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;vi&quot;&gt;@string&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;string&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;call&lt;/span&gt;
-      &lt;span class=&quot;vi&quot;&gt;@string&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;inject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({})&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;line&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;line&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;match&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;LINE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;match&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;captures&lt;/span&gt;
-
-        &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;&amp;#39;&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;# Remove surrounding quotes&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strip&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/\A([&amp;#39;&amp;quot;])(.*)\1\z/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;\2&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;&amp;quot;&amp;#39;&lt;/span&gt;
-          &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;\n&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-          &lt;span class=&quot;c1&quot;&gt;# Unescape all characters except $ so variables can be escaped properly&lt;/span&gt;
-          &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/\\([^$])/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;\1&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-        &lt;span class=&quot;vc&quot;&gt;@@substitutions&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;proc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-          &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;proc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-        &lt;span class=&quot;nb&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;elsif&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;line&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!~&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/\A\s*(?:#.*)?\z/&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# not comment or blank line&lt;/span&gt;
-          &lt;span class=&quot;k&quot;&gt;raise&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;FormatError&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Line &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;line&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;inspect&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; doesn&amp;#39;t match format&amp;quot;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;hash&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;What does this piece of code do?&lt;/h2&gt;
-
-&lt;p&gt;Well it&amp;#39;s just takes an &lt;code&gt;Environment&lt;/code&gt; object which contains all the key
-values pairs extracted from the files and start validating it. Basically that&amp;#39;s
-it. It uses some other piece of code which resides inside some value objects
-which I will talk about them later. Why I think they are value objects? Well
-for starter they are immutable and what they do is getting some data and
-returning some output, doesn&amp;#39;t handle any type of state; that&amp;#39;s why.&lt;/p&gt;
-
-&lt;h2&gt;What did I learn from this piece of code?&lt;/h2&gt;
-</description>
-        <pubDate>Tue, 22 Jul 2014 17:43:00 -0400</pubDate>
-        <link>http://cored.github.io/blog/2014/07/22/code-read-dotenv-part-3</link>
-        <guid isPermaLink="true">http://cored.github.io/blog/2014/07/22/code-read-dotenv-part-3</guid>
       </item>
     
   </channel>
