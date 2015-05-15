@@ -4,13 +4,40 @@
  <title>Black Matter</title>
  <link href="http://cored.github.ioatom.xml" rel="self"/>
  <link href="http://cored.github.io"/>
- <updated>2015-05-15T09:47:31-04:00</updated>
+ <updated>2015-05-15T10:10:19-04:00</updated>
  <id>http://cored.github.io</id>
  <author>
    <name></name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>Pairate another pairing session</title>
+   <link href="http://cored.github.io/blog/2015/05/15/pairate-another-pairing-session"/>
+   <updated>2015-05-15T09:55:42-04:00</updated>
+   <id>http://cored.github.io/blog/2015/05/15/pairate-another-pairing-session</id>
+   <content type="html">&lt;p&gt;So, this week I had another pairing session and as always it&amp;#39;s blows my mind
+the way that I need to think for better terms to explain what I&amp;#39;m thinking to
+other people. For this session me and my pairing partner were working on a library
+for creating coding katas challenges based on (Codewars)[http://codewars.com] challenges,
+which is a great idea and probably I&amp;#39;ll keep contributing to the project.&lt;/p&gt;
+
+&lt;p&gt;Regarding the session itself we were arguing regarding how, what and why to test
+which gave me more insight in the way I approach a problem. We ended up doing the
+(String Calculator Kata)[http://osherove.com/tdd-kata-1/] instead of his idea just
+to practice a little bit of TDD. Revisiting old challenges is a great way to
+acknowledge some of your deficiencies as a developer.  I recommend to everyone that
+from time to time just go ahead and pair with someone and using old code and
+try to rewrite it you won&amp;#39;t just learn a lot technically but also about you as
+a person.&lt;/p&gt;
+
+&lt;h2&gt;Resources&lt;/h2&gt;
+
+&lt;p&gt;(Pirates)[http://github.com/pairates] - Organization related to all the
+projects I&amp;#39;ll be working on for the pairing sessions.&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Paring Session: Adding roles to a Rails app</title>

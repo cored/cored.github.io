@@ -8,6 +8,33 @@
     <atom:link href="http://cored.github.io/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Pairate another pairing session</title>
+        <description>&lt;p&gt;So, this week I had another pairing session and as always it&amp;#39;s blows my mind
+the way that I need to think for better terms to explain what I&amp;#39;m thinking to
+other people. For this session me and my pairing partner were working on a library
+for creating coding katas challenges based on (Codewars)[http://codewars.com] challenges,
+which is a great idea and probably I&amp;#39;ll keep contributing to the project.&lt;/p&gt;
+
+&lt;p&gt;Regarding the session itself we were arguing regarding how, what and why to test
+which gave me more insight in the way I approach a problem. We ended up doing the
+(String Calculator Kata)[http://osherove.com/tdd-kata-1/] instead of his idea just
+to practice a little bit of TDD. Revisiting old challenges is a great way to
+acknowledge some of your deficiencies as a developer.  I recommend to everyone that
+from time to time just go ahead and pair with someone and using old code and
+try to rewrite it you won&amp;#39;t just learn a lot technically but also about you as
+a person.&lt;/p&gt;
+
+&lt;h2&gt;Resources&lt;/h2&gt;
+
+&lt;p&gt;(Pirates)[http://github.com/pairates] - Organization related to all the
+projects I&amp;#39;ll be working on for the pairing sessions.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 15 May 2015 09:55:42 -0400</pubDate>
+        <link>http://cored.github.io/blog/2015/05/15/pairate-another-pairing-session</link>
+        <guid isPermaLink="true">http://cored.github.io/blog/2015/05/15/pairate-another-pairing-session</guid>
+      </item>
+    
+      <item>
         <title>Paring Session: Adding roles to a Rails app</title>
         <description>&lt;p&gt;The other day I decided to start doing something that &lt;a href=&quot;https://twitter.com/avdi&quot;&gt;Avdi Grimm&lt;/a&gt;
 is been doing for a long time now; pairing. I&amp;#39;m not doing it as a business
@@ -728,71 +755,6 @@ found within the full&lt;/em&gt;text.&lt;/p&gt;
         <pubDate>Mon, 18 Aug 2014 20:06:00 -0400</pubDate>
         <link>http://cored.github.io/blog/2014/08/18/a-kata-a-day-substring-counter</link>
         <guid isPermaLink="true">http://cored.github.io/blog/2014/08/18/a-kata-a-day-substring-counter</guid>
-      </item>
-    
-      <item>
-        <title>A kata a day: Spin words</title>
-        <description>&lt;h1&gt;Problem Statement&lt;/h1&gt;
-
-&lt;p&gt;Write a function that takes in a string of one or more words, and returns the same 
-string, but with all five or more letter words reversed (Just like the name of this Kata). 
-Strings passed in will consist of only letters and spaces. Spaces will be included 
-only when more than one word is present.&lt;/p&gt;
-
-&lt;h1&gt;Specs&lt;/h1&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;describe&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;SpinWords&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; 
-  &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;returns same word for size less than five&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; 
-    &lt;span class=&quot;n&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;This&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;extend&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;SpinWords&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;spin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;eql&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;This&amp;quot;&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;returns the reverse word for size greater or equal to five&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; 
-    &lt;span class=&quot;n&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;words&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;extend&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;SpinWords&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;spin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;eql&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;words&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reverse&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;phrases&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; 
-    &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;returns the same words for phrases smaller than 5&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; 
-      &lt;span class=&quot;n&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;This word&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;extend&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;SpinWords&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;spin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;eql&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;This word&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;returns the same the proper spin for &amp;quot;Hey fellow warriors&amp;quot;&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; 
-      &lt;span class=&quot;n&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;Hey fellow warriors&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;extend&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;SpinWords&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;spin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;eql&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Hey wollef sroirraw&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h1&gt;Implementation&lt;/h1&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;SpinWords&lt;/span&gt; 
-  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;spin&lt;/span&gt; 
-    &lt;span class=&quot;nb&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/\s/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;map&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reverse&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;word&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39; &amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h1&gt;Bonus implementation&lt;/h1&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;SpinWords&lt;/span&gt; 
-  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;spin&lt;/span&gt; 
-    &lt;span class=&quot;nb&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/\w{5,}+/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reverse&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h1&gt;What did I learn from this kata?&lt;/h1&gt;
-
-&lt;p&gt;Actually most of the implementation details from this solution I knew it
-already; but what I think was worth while was starting for the most simple
-problem that I had and keep iterating at first some of the first part of this
-implementation did not work for the more general parts of the problem but then
-I just change the implementation and did work. One of the the main things
-I think I learned was that probably I have to learn how to identify the best
-simple problem to start with; because I had to change the first implementation
-entirely when I confront myself with more complex cases. So I think that&amp;#39;s
-worth researching on. &lt;/p&gt;
-
-&lt;p&gt;Regarding the two implementations I think the gsub one is more clear than the
-first one I did; also probably faster but I did not do any benchmark so I can&amp;#39;t
-know for sure. Anyways I think this was a fun kata for today; until next time.&lt;/p&gt;
-</description>
-        <pubDate>Thu, 14 Aug 2014 16:05:00 -0400</pubDate>
-        <link>http://cored.github.io/blog/2014/08/14/a-kata-a-day-spin-words</link>
-        <guid isPermaLink="true">http://cored.github.io/blog/2014/08/14/a-kata-a-day-spin-words</guid>
       </item>
     
   </channel>
