@@ -6,12 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Lunch and Learn: Becoming a Better Hacker by Jessica McKellar</title>
-  <meta name="description" content="I&#39;m normally on the hunt of that particular formula to get better at what I do.Lately after lunch I started to watch presentations to learn stuff and as ...">
+  <title>My List of Best Practices for Rails Applications</title>
+  <meta name="description" content="Today I decided to write about a list of rules that I follow when working withRails. This rules are by no mean the way to go for everyone take what you think...">
 
   <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Arvo">
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://cored.github.io/blog/2013/08/30/lunch-and-learn-becoming-a-better-hacker-by-jessica-mckellar">
+  <link rel="canonical" href="http://cored.github.io/blog/2015/06/23/my-list-of-best-practices-for-rails-applications">
   <link rel="alternate" type="application/rss+xml" title="Black Matter" href="http://cored.github.io/feed.xml" />
 </head>
 
@@ -82,54 +82,103 @@
         <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">Lunch and Learn: Becoming a Better Hacker by Jessica McKellar</h1>
-    <p class="post-meta">Aug 30, 2013</p>
+    <h1 class="post-title">My List of Best Practices for Rails Applications</h1>
+    <p class="post-meta">Jun 23, 2015</p>
   </header>
 
   <article class="post-content">
-    <p>I&#39;m normally on the hunt of that particular formula to get better at what I do.
-Lately after lunch I started to watch presentations to learn stuff and as I now
-have a blog well it&#39;s time to write about what I&#39;ve been learning from those
-talks. </p>
+    <p>Today I decided to write about a list of rules that I follow when working with
+Rails. This rules are by no mean the way to go for everyone take what you think
+is correct and try to use it. I will try to update this list as new rules
+appears on my experiment.</p>
 
-<p>This is the presentation I saw today from a well known Python hacker, Jessica
-McKellar:</p>
+<h2>Controllers</h2>
 
-<p><iframe src="//player.vimeo.com/video/71763919" width="500" height="281"
-frameborder="0" webkitallowfullscreen mozallowfullscreen
-allowfullscreen></iframe> <p><a href="http://vimeo.com/71763919">Jessica
-McKellar: Becoming a Better Hacker</a> from <a
-href="http://vimeo.com/cusec">CUSEC</a> on <a
-href="https://vimeo.com">Vimeo</a>.</p></p>
+<ul>
+<li>Do not call any query methods directly to a model (Finders methods are ok to
+call).</li>
+<li>Do not catch active record exceptions.</li>
+<li>Do not use if statements inside actions (Use service or interactor objects for handling the business logic).</li>
+<li>Do not use filters.</li>
+<li>Return just one instance variable from your actions.</li>
+</ul>
 
-<h2>What I learned</h2>
+<h1>Testing</h1>
 
-<h3>Characteristics of good developers/hackers</h3>
+<ul>
+<li>Just test for the proper http code if developing an API</li>
+</ul>
 
-<ol>
-<li>Systematic Debugging</li>
-<li>Can break down large problems, architect solutions</li>
-<li>Comfortable learning on the fly</li>
-<li>Good communicator </li>
-<li>Good intuition</li>
-</ol>
+<h2>Active Record</h2>
 
-<h3>How to get those characteristics?</h3>
+<ul>
+<li>Reference models within other models for anything else expose a public
+method.</li>
+<li>Wrap methods for create/update/save to define a persistence API for the application.</li>
+<li>Wrap in scopes every query methods for the model.</li>
+<li>Do not throw exceptions from methods return true or false.</li>
+<li>Do not use callbacks be explicit about your methods calls.</li>
+<li>Extend behavior of models using decorators.</li>
+<li>Validations are a good thing to use inside models if they turn out to be too complex
+use a validator object.</li>
+</ul>
 
-<ol>
-<li>Pick a doubt that you have regarding anything, share it with someone and
- then try to come with a project that solve that doubt.It will be better if
- that particular thing lead you to learn something new in the process.</li>
-<li>Contribute to opensource project and publish everything you do. If you
- don&#39;t know which projects to contribute she suggest http://openhatch.org
- to get started; I will go ahead and suggest http://codetriage.com which is
- the site I currently use for this type of things.</li>
-<li>Write about something technical this month.</li>
-</ol>
+<h1>Testing</h1>
 
-<p>The presentation is quite clear on steps to do to become better at what you do;
-so I think I will start to try to focus more on what&#39;s needs to be done instead
-on how I&#39;m doing it. </p>
+<ul>
+<li>Just test behavior avoid testing implementation things like
+<code>
+expect(model).to has_one(another_model)
+</code>
+are discourage.</li>
+<li>Same thing for validations; test it indirectly through testing behavior.</li>
+</ul>
+
+<h2>Views</h2>
+
+<ul>
+<li>Do not use helpers for formatting data use presenters objects.</li>
+<li>Do not use predicate helper methods in your views for handling conditionals
+use view models.</li>
+<li>Wrap validations for forms within Form Objects.</li>
+</ul>
+
+<h1>Testing</h1>
+
+<ul>
+<li>Do not test views; there&#39;s no logic in there</li>
+</ul>
+
+<h2>Conclusion</h2>
+
+<p>Probably you will be asking where should I put all the business logic for my
+application; well you have a plethora of concepts from the object oriented
+design world. You can use interactors or services, decorators, adapters,
+presenters, value objects; try to find what&#39;s right for your case and implement it.
+Remember that Rails is just a framework it is not your application.</p>
+
+<h2>Resources</h2>
+
+<h1>Talks</h1>
+
+<ul>
+<li><a href="https://www.youtube.com/watch?v=WpkDN78P884">Architecture: The Lost Years</a></li>
+<li><a href="https://www.youtube.com/watch?v=IqajIYxbPOI">Refactoring Fat Models with Patterns</a></li>
+</ul>
+
+<h1>Articles</h1>
+
+<ul>
+<li><a href="https://sourcemaking.com/design_patterns">Design Patterns</a></li>
+<li><a href="http://blog.steveklabnik.com/posts/2011-09-06-the-secret-to-rails-oo-design">The Secret to Rails OO Design</a></li>
+</ul>
+
+<h1>Books</h1>
+
+<ul>
+<li><a href="http://rails-refactoring.com/">Fearless Refactoring</a></li>
+<li><a href="https://thoughtbot.com/books">Ruby Science</a></li>
+</ul>
 
   </article>
 

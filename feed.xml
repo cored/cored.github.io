@@ -8,6 +8,106 @@
     <atom:link href="http://cored.github.io/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>My List of Best Practices for Rails Applications</title>
+        <description>&lt;p&gt;Today I decided to write about a list of rules that I follow when working with
+Rails. This rules are by no mean the way to go for everyone take what you think
+is correct and try to use it. I will try to update this list as new rules
+appears on my experiment.&lt;/p&gt;
+
+&lt;h2&gt;Controllers&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Do not call any query methods directly to a model (Finders methods are ok to
+call).&lt;/li&gt;
+&lt;li&gt;Do not catch active record exceptions.&lt;/li&gt;
+&lt;li&gt;Do not use if statements inside actions (Use service or interactor objects for handling the business logic).&lt;/li&gt;
+&lt;li&gt;Do not use filters.&lt;/li&gt;
+&lt;li&gt;Return just one instance variable from your actions.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1&gt;Testing&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Just test for the proper http code if developing an API&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;Active Record&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Reference models within other models for anything else expose a public
+method.&lt;/li&gt;
+&lt;li&gt;Wrap methods for create/update/save to define a persistence API for the application.&lt;/li&gt;
+&lt;li&gt;Wrap in scopes every query methods for the model.&lt;/li&gt;
+&lt;li&gt;Do not throw exceptions from methods return true or false.&lt;/li&gt;
+&lt;li&gt;Do not use callbacks be explicit about your methods calls.&lt;/li&gt;
+&lt;li&gt;Extend behavior of models using decorators.&lt;/li&gt;
+&lt;li&gt;Validations are a good thing to use inside models if they turn out to be too complex
+use a validator object.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1&gt;Testing&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Just test behavior avoid testing implementation things like
+&lt;code&gt;
+expect(model).to has_one(another_model)
+&lt;/code&gt;
+are discourage.&lt;/li&gt;
+&lt;li&gt;Same thing for validations; test it indirectly through testing behavior.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;Views&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Do not use helpers for formatting data use presenters objects.&lt;/li&gt;
+&lt;li&gt;Do not use predicate helper methods in your views for handling conditionals
+use view models.&lt;/li&gt;
+&lt;li&gt;Wrap validations for forms within Form Objects.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1&gt;Testing&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Do not test views; there&amp;#39;s no logic in there&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Probably you will be asking where should I put all the business logic for my
+application; well you have a plethora of concepts from the object oriented
+design world. You can use interactors or services, decorators, adapters,
+presenters, value objects; try to find what&amp;#39;s right for your case and implement it.
+Remember that Rails is just a framework it is not your application.&lt;/p&gt;
+
+&lt;h2&gt;Resources&lt;/h2&gt;
+
+&lt;h1&gt;Talks&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=WpkDN78P884&quot;&gt;Architecture: The Lost Years&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=IqajIYxbPOI&quot;&gt;Refactoring Fat Models with Patterns&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1&gt;Articles&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://sourcemaking.com/design_patterns&quot;&gt;Design Patterns&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://blog.steveklabnik.com/posts/2011-09-06-the-secret-to-rails-oo-design&quot;&gt;The Secret to Rails OO Design&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1&gt;Books&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://rails-refactoring.com/&quot;&gt;Fearless Refactoring&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://thoughtbot.com/books&quot;&gt;Ruby Science&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Tue, 23 Jun 2015 07:11:22 -0400</pubDate>
+        <link>http://cored.github.io/blog/2015/06/23/my-list-of-best-practices-for-rails-applications</link>
+        <guid isPermaLink="true">http://cored.github.io/blog/2015/06/23/my-list-of-best-practices-for-rails-applications</guid>
+      </item>
+    
+      <item>
         <title>Pairate another pairing session</title>
         <description>&lt;p&gt;So, this week I had another pairing session and as always it&amp;#39;s blows my mind
 the way that I need to think for better terms to explain what I&amp;#39;m thinking to
@@ -712,49 +812,6 @@ replace it with just one dot. &lt;/li&gt;
         <pubDate>Mon, 25 Aug 2014 21:14:00 -0400</pubDate>
         <link>http://cored.github.io/blog/2014/08/25/a-kata-a-day-simple-sentences</link>
         <guid isPermaLink="true">http://cored.github.io/blog/2014/08/25/a-kata-a-day-simple-sentences</guid>
-      </item>
-    
-      <item>
-        <title>A kata a day: Substring counter</title>
-        <description>&lt;h1&gt;Problem statement&lt;/h1&gt;
-
-&lt;p&gt;Complete the solution so that it returns the number of times the search&lt;em&gt;text is 
-found within the full&lt;/em&gt;text.&lt;/p&gt;
-
-&lt;h1&gt;Specification&lt;/h1&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;describe&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;SubstringCount&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;describe&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;#count&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;returns the proper count for a substring consisting of an individual character&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;SubstringCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;aaaa&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;a&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;eql&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;returns the proper count for a substring of more than one character&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;SubstringCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;aa_bb_cc_dd&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;aa&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;eql&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;returns proper count for a longer string&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;SubstringCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;aaabbbcccc&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;bbb&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;eql&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h1&gt;Solution&lt;/h1&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;SubstringCount&lt;/span&gt;
-  &lt;span class=&quot;kp&quot;&gt;extend&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;
-
-  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;full_text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;search_text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;full_text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scan&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;search_text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h1&gt;What did I learn from this kata?&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://www.ruby-doc.org/core-2.1.2/String.html#method-i-scan&quot;&gt;String#scan&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Mon, 18 Aug 2014 20:06:00 -0400</pubDate>
-        <link>http://cored.github.io/blog/2014/08/18/a-kata-a-day-substring-counter</link>
-        <guid isPermaLink="true">http://cored.github.io/blog/2014/08/18/a-kata-a-day-substring-counter</guid>
       </item>
     
   </channel>

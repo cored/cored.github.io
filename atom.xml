@@ -4,13 +4,113 @@
  <title>Black Matter</title>
  <link href="http://cored.github.ioatom.xml" rel="self"/>
  <link href="http://cored.github.io"/>
- <updated>2015-05-15T10:10:19-04:00</updated>
+ <updated>2015-06-23T07:13:56-04:00</updated>
  <id>http://cored.github.io</id>
  <author>
    <name></name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>My List of Best Practices for Rails Applications</title>
+   <link href="http://cored.github.io/blog/2015/06/23/my-list-of-best-practices-for-rails-applications"/>
+   <updated>2015-06-23T07:11:22-04:00</updated>
+   <id>http://cored.github.io/blog/2015/06/23/my-list-of-best-practices-for-rails-applications</id>
+   <content type="html">&lt;p&gt;Today I decided to write about a list of rules that I follow when working with
+Rails. This rules are by no mean the way to go for everyone take what you think
+is correct and try to use it. I will try to update this list as new rules
+appears on my experiment.&lt;/p&gt;
+
+&lt;h2&gt;Controllers&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Do not call any query methods directly to a model (Finders methods are ok to
+call).&lt;/li&gt;
+&lt;li&gt;Do not catch active record exceptions.&lt;/li&gt;
+&lt;li&gt;Do not use if statements inside actions (Use service or interactor objects for handling the business logic).&lt;/li&gt;
+&lt;li&gt;Do not use filters.&lt;/li&gt;
+&lt;li&gt;Return just one instance variable from your actions.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1&gt;Testing&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Just test for the proper http code if developing an API&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;Active Record&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Reference models within other models for anything else expose a public
+method.&lt;/li&gt;
+&lt;li&gt;Wrap methods for create/update/save to define a persistence API for the application.&lt;/li&gt;
+&lt;li&gt;Wrap in scopes every query methods for the model.&lt;/li&gt;
+&lt;li&gt;Do not throw exceptions from methods return true or false.&lt;/li&gt;
+&lt;li&gt;Do not use callbacks be explicit about your methods calls.&lt;/li&gt;
+&lt;li&gt;Extend behavior of models using decorators.&lt;/li&gt;
+&lt;li&gt;Validations are a good thing to use inside models if they turn out to be too complex
+use a validator object.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1&gt;Testing&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Just test behavior avoid testing implementation things like
+&lt;code&gt;
+expect(model).to has_one(another_model)
+&lt;/code&gt;
+are discourage.&lt;/li&gt;
+&lt;li&gt;Same thing for validations; test it indirectly through testing behavior.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;Views&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Do not use helpers for formatting data use presenters objects.&lt;/li&gt;
+&lt;li&gt;Do not use predicate helper methods in your views for handling conditionals
+use view models.&lt;/li&gt;
+&lt;li&gt;Wrap validations for forms within Form Objects.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1&gt;Testing&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Do not test views; there&amp;#39;s no logic in there&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Probably you will be asking where should I put all the business logic for my
+application; well you have a plethora of concepts from the object oriented
+design world. You can use interactors or services, decorators, adapters,
+presenters, value objects; try to find what&amp;#39;s right for your case and implement it.
+Remember that Rails is just a framework it is not your application.&lt;/p&gt;
+
+&lt;h2&gt;Resources&lt;/h2&gt;
+
+&lt;h1&gt;Talks&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=WpkDN78P884&quot;&gt;Architecture: The Lost Years&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=IqajIYxbPOI&quot;&gt;Refactoring Fat Models with Patterns&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1&gt;Articles&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://sourcemaking.com/design_patterns&quot;&gt;Design Patterns&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://blog.steveklabnik.com/posts/2011-09-06-the-secret-to-rails-oo-design&quot;&gt;The Secret to Rails OO Design&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1&gt;Books&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://rails-refactoring.com/&quot;&gt;Fearless Refactoring&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://thoughtbot.com/books&quot;&gt;Ruby Science&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Pairate another pairing session</title>
