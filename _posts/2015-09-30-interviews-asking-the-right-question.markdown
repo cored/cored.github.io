@@ -29,7 +29,7 @@ company will be a good fit for you.
 Probably you are thinking but I need a job right away. And I understand that
 but you shouldn't be putting yourself in a position of suffering; believe me
 when I say this if you don't figure out the amount of effort that you will have to
-do to just deliver value to that company you will suffer.  To me life is to short to
+do to just deliver value to that company you will suffer.  To me life is too short to
 be miserable most of the time and since we spend a lot of time at work is better
 to find the place that is actually align with our values and goals so we can
 smile more often about the things that we love the most, coding.
