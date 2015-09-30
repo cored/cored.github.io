@@ -1,0 +1,3 @@
+layout: default
+permalink: /talks
+-----------------
