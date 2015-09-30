@@ -4,13 +4,48 @@
  <title>Black Matter</title>
  <link href="http://cored.github.ioatom.xml" rel="self"/>
  <link href="http://cored.github.io"/>
- <updated>2015-06-27T17:38:32-04:00</updated>
+ <updated>2015-09-30T15:27:43-04:00</updated>
  <id>http://cored.github.io</id>
  <author>
    <name></name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>Interviews Asking The Right Question</title>
+   <link href="http://cored.github.io/blog/2015/09/30/interviews-asking-the-right-question"/>
+   <updated>2015-09-30T00:00:00-04:00</updated>
+   <id>http://cored.github.io/blog/2015/09/30/interviews-asking-the-right-question</id>
+   <content type="html">&lt;p&gt;For a long time I was in the mistaken position of not asking questions in
+interviews. After several bad careers decisions I decided that enough was
+enough. I needed to learn how to figure out if the company in question was good
+so I wrote a questionnaire to ask in interviews. I got some success
+just questioning my interviewer about their internal technology stack, what
+does he/she thinks about the technology they were using and such and such.&lt;/p&gt;
+
+&lt;p&gt;The thing is that we get older and wiser. And now I think the most important
+thing that we should try to learn from an interview before signing anything is
+how well establish the organization&amp;#39;s processes are. I&amp;#39;m talking about the
+things that really matter to deliver actual value to the business.&lt;/p&gt;
+
+&lt;p&gt;It is not enough to know that the company is using an &amp;quot;agile methodology&amp;quot; you
+should figure out if they are actually committed to the benefits of following
+such methodology. You should figure out if the company is actually committed to
+delivering well crafted code. Are they doing test driven development?
+Are they doing continues improvement to the code through refactoring? If you
+can&amp;#39;t figure this out in the interview then you should reconsider if that
+company will be a good fit for you.&lt;/p&gt;
+
+&lt;p&gt;Probably you are thinking but I need a job right away. And I understand that
+but you shouldn&amp;#39;t be putting yourself in a position of suffering; believe me
+when I say this if you don&amp;#39;t figure out the amount of effort that you will have to
+do to just deliver value to that company you will suffer.  To me life is to short to
+be miserable most of the time and since we spend a lot of time at work is better
+to find the place that is actually align with our values and goals so we can
+smile more often about the things that we love the most, coding.&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>My List of Best Practices for Rails Applications</title>
