@@ -1,9 +1,9 @@
 ---
 layout: post
-title: Interviews: Asking the Right Question
+title: Interviews - Asking the Right Question
 date: 2015-09-30T15:10:12-04:00
 comments: true
-categories: ["Rant"]
+category: ["Rant"]
 ---
 
 For a long time I was in the mistaken position of not asking questions in
