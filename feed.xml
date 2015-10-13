@@ -8,6 +8,41 @@
     <atom:link href="http://cored.github.io/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Til: Getting Into Rescue Mode With a Linux System</title>
+        <description>&lt;p&gt;I think this is old and to be honest I partially knew it but either way I think
+it would be better documented now. What I learned today was a better way to fix my Arch
+Linux system after forgetting about mounting the boot partition and upgrading
+the kernel; needless to say that you don&amp;#39;t want to do that. So, with further
+ado here are the steps:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;In grub press e - to edit the menu configuration options&lt;/li&gt;
+&lt;li&gt;Go to the line in which the command linux is written&lt;/li&gt;
+&lt;li&gt;Go the end of that line and type init=single&lt;/li&gt;
+&lt;li&gt;Hit ctrl-x&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;At the new prompt type the following:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;mount /dev/sda1 /new_root/boot -&amp;gt; If sda1 is the partition in which you have
+boot&lt;/li&gt;
+&lt;li&gt;mount &lt;any_other_relevant_partitions&gt;&lt;/li&gt;
+&lt;li&gt;mount -t proc proc /new_root/proc&lt;/li&gt;
+&lt;li&gt;mount -t sysfs sys /new_root/sys&lt;/li&gt;
+&lt;li&gt;mount -o bind /dev /new_root/dev&lt;/li&gt;
+&lt;li&gt;chroot /new_root bash&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;And voila, you will be in your more or less normal system waiting for you to
+fix it.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 13 Oct 2015 17:51:41 -0400</pubDate>
+        <link>http://cored.github.io/blog/2015/10/13/til-getting-into-rescue-mode-with-a-linux-system</link>
+        <guid isPermaLink="true">http://cored.github.io/blog/2015/10/13/til-getting-into-rescue-mode-with-a-linux-system</guid>
+      </item>
+    
+      <item>
         <title>Interviews - Asking the Right Question</title>
         <description>&lt;p&gt;For a long time I was in the mistaken position of not asking questions in
 interviews. After several bad careers decisions I decided that enough was
@@ -708,69 +743,6 @@ programming. Happy hacking!&lt;/p&gt;
         <pubDate>Tue, 21 Oct 2014 00:00:00 -0400</pubDate>
         <link>http://cored.github.io/blog/2014/10/21/kata-a-day-narcissistic-numbers</link>
         <guid isPermaLink="true">http://cored.github.io/blog/2014/10/21/kata-a-day-narcissistic-numbers</guid>
-      </item>
-    
-      <item>
-        <title>Baruco 2014: The good, the bad and the ugly</title>
-        <description>&lt;p&gt;So this year I went to &lt;a href=&quot;http://www.baruco.org&quot;&gt;Baruco&lt;/a&gt; and it was a blast;
-apart from a few things that well I did not like it that much. So without
-further ado here is my summary.&lt;/p&gt;
-
-&lt;h2&gt;The goods&lt;/h2&gt;
-
-&lt;p&gt;Seems last year when I went to Rubyconf I decided to go to one conference per
-year. I was planning to go to the same conference again but I wanted to try
-something different and that&amp;#39;s how I decided to go to Barcelona and also
-Baruco.&lt;/p&gt;
-
-&lt;p&gt;I had the same feeling as when I first tested a single malted whisky; I just
-love single track conferences; is like you never miss a thing. I wasn&amp;#39;t too
-much into some of the talks at first but after been there they were engaging
-and informative as I could never imagine. Too be honest in my head at first
-I just wanted to see &lt;a href=&quot;https://twitter.com/evanphx&quot;&gt;Evan Phoenix&amp;#39;s&lt;/a&gt; talk and
-I did and it was good but there were so many talks teaching something more than
-just technical stuffs; like the one from &lt;a href=&quot;https://twitter.com/rubybuddha&quot;&gt;Leo Gersing&lt;/a&gt;
-or &lt;a href=&quot;https://twitter.com/eljojo&quot;&gt;Jose Albornoz&lt;/a&gt; these people show more than just
-technical knowledge they manage to show us courage and also passion in a very
-new and deep level.&lt;/p&gt;
-
-&lt;p&gt;But in the technical front there were a lot of new things to experiment with
-like refactoring Ruby code with Monads from &lt;a href=&quot;http://twitter.com/tomstuart&quot;&gt;Tom Stuart&lt;/a&gt;
-even his lighting talk was also cool. The technical surprise for me was the
-talk about the standard library from &lt;a href=&quot;http://twitter.com/chastell&quot;&gt;Piotr Szotrowski&lt;/a&gt;
-which gave me a lot of things to play back at where I was staying. I know I&amp;#39;ve just
-been to two conferences but this is definitely better than Rubyconf.&lt;/p&gt;
-
-&lt;h2&gt;The bad&lt;/h2&gt;
-
-&lt;p&gt;Well I&amp;#39;m still into laptop decoration and I always want more stickers; Baruco
-had none. I don&amp;#39;t know if the sponsors just wanted to be remember because they
-provides us with a good place for the conference but I really prefer to
-remember then watching at my own way of art expression through my laptop top.
-So please next time give more stickers.&lt;/p&gt;
-
-&lt;h2&gt;The ugly&lt;/h2&gt;
-
-&lt;p&gt;Programmers had to eat and even this was one of the best points of the entire
-venue; there was one restaurant that was bad as hell. My friends and I made the
-mistake of getting into that particular place because the first day was full of
-people for the conference; but in fact they made the location wise mistake
-because the food and the service was awful. So I guess what I&amp;#39;m asking for is
-just to see some reviews and even have a test drive for the places you guys
-will be offering food from. After a morning of a lot of brain activity we
-developers will like to have good food.&lt;/p&gt;
-
-&lt;h2&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;Love Baruco, love Barcelona and probably will come back next year to enjoy the
-free drinks, great parties, talks but above all the new and fun Ruby community
-the one that not just have a high level of technical knowledge but still show
-a lot of passion about whatever they are doing. Kudos to the organizers of this
-amazing conference and see you probably next year ;-)&lt;/p&gt;
-</description>
-        <pubDate>Tue, 16 Sep 2014 23:42:46 -0400</pubDate>
-        <link>http://cored.github.io/blog/2014/09/16/baruco-2014-the-good</link>
-        <guid isPermaLink="true">http://cored.github.io/blog/2014/09/16/baruco-2014-the-good</guid>
       </item>
     
   </channel>

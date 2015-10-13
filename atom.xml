@@ -4,13 +4,48 @@
  <title>Black Matter</title>
  <link href="http://cored.github.ioatom.xml" rel="self"/>
  <link href="http://cored.github.io"/>
- <updated>2015-09-30T16:10:43-04:00</updated>
+ <updated>2015-10-13T17:53:44-04:00</updated>
  <id>http://cored.github.io</id>
  <author>
    <name></name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>Til: Getting Into Rescue Mode With a Linux System</title>
+   <link href="http://cored.github.io/blog/2015/10/13/til-getting-into-rescue-mode-with-a-linux-system"/>
+   <updated>2015-10-13T17:51:41-04:00</updated>
+   <id>http://cored.github.io/blog/2015/10/13/til-getting-into-rescue-mode-with-a-linux-system</id>
+   <content type="html">&lt;p&gt;I think this is old and to be honest I partially knew it but either way I think
+it would be better documented now. What I learned today was a better way to fix my Arch
+Linux system after forgetting about mounting the boot partition and upgrading
+the kernel; needless to say that you don&amp;#39;t want to do that. So, with further
+ado here are the steps:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;In grub press e - to edit the menu configuration options&lt;/li&gt;
+&lt;li&gt;Go to the line in which the command linux is written&lt;/li&gt;
+&lt;li&gt;Go the end of that line and type init=single&lt;/li&gt;
+&lt;li&gt;Hit ctrl-x&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;At the new prompt type the following:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;mount /dev/sda1 /new_root/boot -&amp;gt; If sda1 is the partition in which you have
+boot&lt;/li&gt;
+&lt;li&gt;mount &lt;any_other_relevant_partitions&gt;&lt;/li&gt;
+&lt;li&gt;mount -t proc proc /new_root/proc&lt;/li&gt;
+&lt;li&gt;mount -t sysfs sys /new_root/sys&lt;/li&gt;
+&lt;li&gt;mount -o bind /dev /new_root/dev&lt;/li&gt;
+&lt;li&gt;chroot /new_root bash&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;And voila, you will be in your more or less normal system waiting for you to
+fix it.&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Interviews - Asking the Right Question</title>
