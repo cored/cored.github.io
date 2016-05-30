@@ -4,13 +4,52 @@
  <title>Black Matter</title>
  <link href="http://cored.github.ioatom.xml" rel="self"/>
  <link href="http://cored.github.io"/>
- <updated>2015-10-13T17:54:46-04:00</updated>
+ <updated>2016-05-30T17:10:57-04:00</updated>
  <id>http://cored.github.io</id>
  <author>
    <name></name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>Test Doubles in Go</title>
+   <link href="http://cored.github.io/blog/2016/05/30/test-doubles-in-go"/>
+   <updated>2016-05-30T17:10:14-04:00</updated>
+   <id>http://cored.github.io/blog/2016/05/30/test-doubles-in-go</id>
+   <content type="html">&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;// Examples of doing test doubles in Go tests
+// Extracted from https://blog.8thlight.com/uncle-bob/2014/05/14/TheLittleMocker.html
+type Authorizer interface {
+    Authorize(username, password string) bool
+}
+// Dummy: Pass it around when you don&amp;#39;t care how it is use
+type DummyAuthorizer struct {}
+func (da *DummyAuthorizer) Authorize(username, password string) bool {
+        return false
+}
+
+// Stub: Use it when you want to test a component on your system in a particular context
+type DummyAuthorizer struct {}
+func (da *DummyAuthorizer) Authorize(username, password string) bool {
+        return true
+}
+
+// Spy: Use it when you want to know that the Authorize method was called
+type AcceptingAuthorizerSpy struct {
+     AuthorizeWasCalled bool
+}
+func (as *AcceptingAuthorizerSpy) Authorize(username, password string) bool {
+        as.AuthorizeWasCalled = true
+        return true
+}
+
+// Fake has business behavior. You can drive a fake to behave in different ways by giving it different data.
+type FakeAuthorizer struct {}
+func (da *FakeAuthorizer) Authorize(username, password string) bool {
+        return username == &amp;quot;Bob&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content>
+ </entry>
  
  <entry>
    <title>Til: Getting Into Rescue Mode With a Linux System</title>
@@ -238,7 +277,7 @@ environments. I&amp;#39;ll see what next week brings with this new experiments.&
  <entry>
    <title>Service Objects in Rails</title>
    <link href="http://cored.github.io/blog/2015/02/26/service-objects-in-rails"/>
-   <updated>2015-02-26T11:07:01-04:00</updated>
+   <updated>2015-02-26T10:07:01-05:00</updated>
    <id>http://cored.github.io/blog/2015/02/26/service-objects-in-rails</id>
    <content type="html">&lt;p&gt;TLDR; &lt;/p&gt;
 
@@ -529,7 +568,7 @@ it&amp;#39;s easier to resonate about those smaller pieces than bigger ones.&lt;
  <entry>
    <title>How to Identify More Than One Level of Abstraction in a Method</title>
    <link href="http://cored.github.io/blog/2015/01/12/how-to-identify-more-than-one-level-of-abstraction-in-a-method"/>
-   <updated>2015-01-12T22:46:03-04:00</updated>
+   <updated>2015-01-12T21:46:03-05:00</updated>
    <id>http://cored.github.io/blog/2015/01/12/how-to-identify-more-than-one-level-of-abstraction-in-a-method</id>
    <content type="html">&lt;p&gt;Here is the spec: &lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;context&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;when the access token has expired&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
@@ -598,7 +637,7 @@ for my next set of refactoring for this code.  &lt;/p&gt;
  <entry>
    <title>Picking the Language of the Year</title>
    <link href="http://cored.github.io/blog/2015/01/11/picking-the-language-of-the-year"/>
-   <updated>2015-01-11T19:41:31-04:00</updated>
+   <updated>2015-01-11T18:41:31-05:00</updated>
    <id>http://cored.github.io/blog/2015/01/11/picking-the-language-of-the-year</id>
    <content type="html">&lt;p&gt;I don&amp;#39;t need to become an expert just expose myself to new ideas. But one of the issues 
 of learning something new when there are so many options is to know which
@@ -623,7 +662,7 @@ it - &lt;a href=&quot;https://pragprog.com/book/btlang/seven-languages-in-seven-
  <entry>
    <title>In the Year 2014</title>
    <link href="http://cored.github.io/blog/2014/12/31/in-the-year-2014"/>
-   <updated>2014-12-31T14:55:01-04:00</updated>
+   <updated>2014-12-31T13:55:01-05:00</updated>
    <id>http://cored.github.io/blog/2014/12/31/in-the-year-2014</id>
    <content type="html">&lt;p&gt;2014 was a year in which I learned and discovered a lot of things, not just in
 the professional realm but in the personal too.&lt;/p&gt;
@@ -2340,7 +2379,7 @@ with better explanation. &lt;/p&gt;
  <entry>
    <title>Another refactoring story</title>
    <link href="http://cored.github.io/blog/2014/02/24/another-refactoring-story"/>
-   <updated>2014-02-24T16:30:00-04:00</updated>
+   <updated>2014-02-24T16:30:00-05:00</updated>
    <id>http://cored.github.io/blog/2014/02/24/another-refactoring-story</id>
    <content type="html">&lt;p&gt;TLDR; Keeping with the refactoring stories started with &lt;a href=&quot;http://cored.github.io/blog/2014/02/19/my-gpa-at-code-climate-is-3-dot-59-a-refactoring-story/&quot;&gt;My GPA in Code Climate is 3.59: A Refactoring Story&lt;/a&gt; I decided today to get a piece of code as much in shape as my knowledge let me, of course I&amp;#39;m always waiting for suggestions on how to improve so please do leave comments. &lt;/p&gt;
 
@@ -2690,7 +2729,7 @@ with better explanation. &lt;/p&gt;
  <entry>
    <title>My GPA at Code Climate is 3.59: A refactoring story</title>
    <link href="http://cored.github.io/blog/2014/02/19/my-gpa-at-code-climate-is-3-dot-59-a-refactoring-story"/>
-   <updated>2014-02-19T10:55:00-04:00</updated>
+   <updated>2014-02-19T10:55:00-05:00</updated>
    <id>http://cored.github.io/blog/2014/02/19/my-gpa-at-code-climate-is-3-dot-59-a-refactoring-story</id>
    <content type="html">&lt;p&gt;What does that title suppose to mean? Yes that&amp;#39;s a very outstanding number I saw that today in a project that I&amp;#39;m working on &lt;a href=&quot;http://github.com/tansaku/LocalSupport&quot;&gt;LocalSupport&lt;/a&gt;. But then I just went to the code and use &lt;a href=&quot;https://github.com/seattlerb/flog&quot;&gt;Flog&lt;/a&gt; and I found this: &lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;mi&quot;&gt;814&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;flog&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;total&lt;/span&gt;
@@ -2853,7 +2892,7 @@ wrong number of arguments (2 for 0)
  <entry>
    <title>What to refactor?</title>
    <link href="http://cored.github.io/blog/2014/02/17/what-to-refactor"/>
-   <updated>2014-02-17T17:18:00-04:00</updated>
+   <updated>2014-02-17T17:18:00-05:00</updated>
    <id>http://cored.github.io/blog/2014/02/17/what-to-refactor</id>
    <content type="html">&lt;p&gt;I receive this question the other day by a friend at that moment I realize that I&amp;#39;ve never thought about it. How do I know where to start when refactoring? And how do I know is the right time? The second question is a little bit obvious the right time is any time. Refactoring is the art of getting your code in shape and you should be doing it often; but the first one is a little bit trickier and I will try to share some tips to consider when you are doing this skill. &lt;/p&gt;
 
@@ -2907,7 +2946,7 @@ wrong number of arguments (2 for 0)
  <entry>
    <title>Jobs Interview - More Ruby, Rails questions and answers</title>
    <link href="http://cored.github.io/blog/2014/02/12/jobs-interview-more-ruby"/>
-   <updated>2014-02-12T12:07:00-04:00</updated>
+   <updated>2014-02-12T12:07:00-05:00</updated>
    <id>http://cored.github.io/blog/2014/02/12/jobs-interview-more-ruby</id>
    <content type="html">&lt;p&gt;Following my series on job interviews which started here &lt;a href=&quot;http://cored.github.io/blog/2013/10/29/rails-job-interview-qa/&quot;&gt;Job Interview - Rails Main Components&lt;/a&gt; This post will have new questions. Hopefully some people will learn a few things, at least I did. Without further ado the questions and answers; enjoy!. &lt;/p&gt;
 
@@ -3003,7 +3042,7 @@ greeter.method(:greeting).call
  <entry>
    <title>If you are going to isolate from Rails why not ditch Rails?</title>
    <link href="http://cored.github.io/blog/2014/02/10/if-you-are-going-to-isolate-from-rails-why-not-ditch-rails"/>
-   <updated>2014-02-10T18:59:00-04:00</updated>
+   <updated>2014-02-10T18:59:00-05:00</updated>
    <id>http://cored.github.io/blog/2014/02/10/if-you-are-going-to-isolate-from-rails-why-not-ditch-rails</id>
    <content type="html">&lt;p&gt;This was an question that &lt;a href=&quot;http://github.com/gotjosh&quot;&gt;@gotjosh&lt;/a&gt; asked me today and is a very valid one. But first let me give you some background on the discussion. &lt;/p&gt;
 
@@ -3028,7 +3067,7 @@ greeter.method(:greeting).call
  <entry>
    <title>Why is strong parameters better than other methods?</title>
    <link href="http://cored.github.io/blog/2014/02/07/why-is-strong-parameters-better-than-other-methods"/>
-   <updated>2014-02-07T14:39:00-04:00</updated>
+   <updated>2014-02-07T14:39:00-05:00</updated>
    <id>http://cored.github.io/blog/2014/02/07/why-is-strong-parameters-better-than-other-methods</id>
    <content type="html">&lt;p&gt;Before answering this question, we first need to know what is strong parameters and before that we need to know what is mass assignment. &lt;/p&gt;
 
@@ -3080,7 +3119,7 @@ Require doesn&amp;#39;t permit thought, you should use it in combination with pe
  <entry>
    <title>Starting a project by myself</title>
    <link href="http://cored.github.io/blog/2014/01/31/starting-a-project-by-myself"/>
-   <updated>2014-01-31T10:55:00-04:00</updated>
+   <updated>2014-01-31T10:55:00-05:00</updated>
    <id>http://cored.github.io/blog/2014/01/31/starting-a-project-by-myself</id>
    <content type="html">&lt;p&gt;It&amp;#39;s been a long time seems I started a project by myself. For me it&amp;#39;s important to have something to play with a side project to keep making progress apart from whatever you do for work. That&amp;#39;s why I decided to start working a Rails project; just because that&amp;#39;s what I normally work with and I think I can keep pushing it to test others technologies around it like. &lt;a href=&quot;http://angularjs.org/&quot;&gt;Angular.JS&lt;/a&gt; or &lt;a href=&quot;http://www.ember.js&quot;&gt;Emeber.JS&lt;/a&gt;. The project I decided to work on is a job board based on an old tutorial from the &lt;a href=&quot;http://symfony.com/&quot;&gt;Symfony Framework&lt;/a&gt; &lt;a href=&quot;http://symfony.com/legacy/doc/jobeet/1_2?orm=Propel&quot;&gt;Jobeet Tutorial&lt;/a&gt;. I did a little bit of analysis to confirm the assumptions from the developers about which feature to pick first and such and such. I&amp;#39;ve been taking other directions with my coding thought I won&amp;#39;t be using exactly the same thing as they did obviously the development stack will be different; I just picked up the user stories created a project &lt;a href=&quot;http://github.com/cored/jobo&quot;&gt;Jobo&lt;/a&gt; and add some issues to follow alone. I&amp;#39;m using &lt;a href=&quot;http://github.com/thoughtbot/suspenders&quot;&gt;Suspenders&lt;/a&gt; as my default template for this app just for testing purpose. I will try to finish this project in a month just the key features that I have from there and up will be more experimentation regarding other technologies and increasing the quality of the code. I encourage anyone who wants to join me to do it. I&amp;#39;ll be adding a wiki page with some of the assumptions and things I do while developing Rails apps so I can share it with others and discuss not every time I will be right ;-)&lt;/p&gt;
 
@@ -3091,7 +3130,7 @@ Require doesn&amp;#39;t permit thought, you should use it in combination with pe
  <entry>
    <title>Why I think some projects fail?</title>
    <link href="http://cored.github.io/blog/2014/01/30/why-i-think-some-projects-fail"/>
-   <updated>2014-01-30T10:22:00-04:00</updated>
+   <updated>2014-01-30T10:22:00-05:00</updated>
    <id>http://cored.github.io/blog/2014/01/30/why-i-think-some-projects-fail</id>
    <content type="html">&lt;p&gt;The other day a friend of mine was talking regarding projects failures and stuffs and he asked for my opinion. Of course I&amp;#39;m not going to predict what is going to happen with all the projects you pretend to work on but I will make the case for a particular project that I&amp;#39;ve worked on and failed I will name this project &lt;strong&gt;FeetBook&lt;/strong&gt; because the name is catchy and the owner of the product did not know exactly what he want to do with it. I won&amp;#39;t describe what the project did because that&amp;#39;s irrelevant I will just describe what I think went wrong with it.&lt;/p&gt;
 
@@ -3116,7 +3155,7 @@ Require doesn&amp;#39;t permit thought, you should use it in combination with pe
  <entry>
    <title>Replace Rake with Thor... but why exactly?</title>
    <link href="http://cored.github.io/blog/2014/01/23/replace-rake-with-thor-dot-dot-dot-but-why-exactly"/>
-   <updated>2014-01-23T20:52:00-04:00</updated>
+   <updated>2014-01-23T20:52:00-05:00</updated>
    <id>http://cored.github.io/blog/2014/01/23/replace-rake-with-thor-dot-dot-dot-but-why-exactly</id>
    <content type="html">&lt;p&gt;I was reading the following article today &lt;a href=&quot;http://codecrate.com/2014/01/replace-rake-with-thor.html?utm_source=rubyweekly&amp;amp;utm_medium=email&quot;&gt;Replace Rake with Thor&lt;/a&gt; the author says the following:&lt;/p&gt;
 
@@ -3165,7 +3204,7 @@ isolation without any real issue.&lt;/p&gt;
  <entry>
    <title>#to_hash</title>
    <link href="http://cored.github.io/blog/2014/01/22/number-to-hash"/>
-   <updated>2014-01-22T22:03:00-04:00</updated>
+   <updated>2014-01-22T22:03:00-05:00</updated>
    <id>http://cored.github.io/blog/2014/01/22/number-to-hash</id>
    <content type="html">&lt;p&gt;How to transform all the instance variables from an object to a hash: &lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;def to_hash
@@ -3181,7 +3220,7 @@ end
  <entry>
    <title>First post of 2014 and new theme</title>
    <link href="http://cored.github.io/blog/2014/01/06/first-post-of-2014-and-new-theme"/>
-   <updated>2014-01-06T20:31:00-04:00</updated>
+   <updated>2014-01-06T20:31:00-05:00</updated>
    <id>http://cored.github.io/blog/2014/01/06/first-post-of-2014-and-new-theme</id>
    <content type="html">&lt;p&gt;Well this will be a quick one, I just switch to a new theme just because
 I think the blog diserve it. I&amp;#39;m kinda busy lately that&amp;#39;s why I&amp;#39;m not posting
@@ -3193,7 +3232,7 @@ and the new look ;-)&lt;/p&gt;
  <entry>
    <title>Lunch and Learn: Building a culture of code quality by Bryan Helmkamp</title>
    <link href="http://cored.github.io/blog/2013/12/19/lunch-and-learn-building-a-culture-of-code-quality-by-bryan-helmkamp"/>
-   <updated>2013-12-19T16:54:00-04:00</updated>
+   <updated>2013-12-19T16:54:00-05:00</updated>
    <id>http://cored.github.io/blog/2013/12/19/lunch-and-learn-building-a-culture-of-code-quality-by-bryan-helmkamp</id>
    <content type="html">&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;//www.youtube.com/embed/YCugeqQuzh4&quot;
 frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;
@@ -3263,7 +3302,7 @@ satisfaction at work ;-)&lt;/p&gt;
  <entry>
    <title>Lunch and Learn: Bad Ruby code doesn't exists by Matt Aimonetti</title>
    <link href="http://cored.github.io/blog/2013/12/10/lunch-and-learn-bad-ruby-code-doesnt-exists-by-matt-aimonetti"/>
-   <updated>2013-12-10T19:59:00-04:00</updated>
+   <updated>2013-12-10T19:59:00-05:00</updated>
    <id>http://cored.github.io/blog/2013/12/10/lunch-and-learn-bad-ruby-code-doesnt-exists-by-matt-aimonetti</id>
    <content type="html">&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;//www.youtube.com/embed/tVkQATR9P00&quot;
 frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;
@@ -3325,7 +3364,7 @@ it.&lt;/p&gt;
  <entry>
    <title>Is Github truly the new resume?</title>
    <link href="http://cored.github.io/blog/2013/11/21/is-github-truly-the-new-resume"/>
-   <updated>2013-11-21T13:09:00-04:00</updated>
+   <updated>2013-11-21T13:09:00-05:00</updated>
    <id>http://cored.github.io/blog/2013/11/21/is-github-truly-the-new-resume</id>
    <content type="html">&lt;p&gt;To be honest I was in that exact sort of religion. But is really Github our
 resume? How costly could be to a company to just rely on that part of
@@ -3362,7 +3401,7 @@ Twi.. ehem Github profile.&lt;/p&gt;
  <entry>
    <title>Struct as collection or not</title>
    <link href="http://cored.github.io/blog/2013/11/21/struct-as-collection-or-not"/>
-   <updated>2013-11-21T09:30:00-04:00</updated>
+   <updated>2013-11-21T09:30:00-05:00</updated>
    <id>http://cored.github.io/blog/2013/11/21/struct-as-collection-or-not</id>
    <content type="html">&lt;p&gt;One of the things I normally do when doing any kind of programming is to wrap
 every single data structure in my system in an object. Why you may ask? Well
@@ -3408,7 +3447,7 @@ just when is the right thing to do.&lt;/p&gt;
  <entry>
    <title>Rubyconf 2013 quick recap</title>
    <link href="http://cored.github.io/blog/2013/11/19/rubyconf-2013-quick-recap"/>
-   <updated>2013-11-19T12:30:00-04:00</updated>
+   <updated>2013-11-19T12:30:00-05:00</updated>
    <id>http://cored.github.io/blog/2013/11/19/rubyconf-2013-quick-recap</id>
    <content type="html">&lt;p&gt;This was my first Rubyconf and I&amp;#39;m planning not to make it the last one. It was
 a great experience and I suggest any one interesting in this fascinating

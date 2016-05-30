@@ -8,6 +8,45 @@
     <atom:link href="http://cored.github.io/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Test Doubles in Go</title>
+        <description>&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;// Examples of doing test doubles in Go tests
+// Extracted from https://blog.8thlight.com/uncle-bob/2014/05/14/TheLittleMocker.html
+type Authorizer interface {
+    Authorize(username, password string) bool
+}
+// Dummy: Pass it around when you don&amp;#39;t care how it is use
+type DummyAuthorizer struct {}
+func (da *DummyAuthorizer) Authorize(username, password string) bool {
+        return false
+}
+
+// Stub: Use it when you want to test a component on your system in a particular context
+type DummyAuthorizer struct {}
+func (da *DummyAuthorizer) Authorize(username, password string) bool {
+        return true
+}
+
+// Spy: Use it when you want to know that the Authorize method was called
+type AcceptingAuthorizerSpy struct {
+     AuthorizeWasCalled bool
+}
+func (as *AcceptingAuthorizerSpy) Authorize(username, password string) bool {
+        as.AuthorizeWasCalled = true
+        return true
+}
+
+// Fake has business behavior. You can drive a fake to behave in different ways by giving it different data.
+type FakeAuthorizer struct {}
+func (da *FakeAuthorizer) Authorize(username, password string) bool {
+        return username == &amp;quot;Bob&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+        <pubDate>Mon, 30 May 2016 17:10:14 -0400</pubDate>
+        <link>http://cored.github.io/blog/2016/05/30/test-doubles-in-go</link>
+        <guid isPermaLink="true">http://cored.github.io/blog/2016/05/30/test-doubles-in-go</guid>
+      </item>
+    
+      <item>
         <title>Til: Getting Into Rescue Mode With a Linux System</title>
         <description>&lt;p&gt;I think this is old and to be honest I partially knew it but either way I think
 it would be better documented now. What I learned today was a better way to fix my Arch
@@ -516,7 +555,7 @@ it&amp;#39;s easier to resonate about those smaller pieces than bigger ones.&lt;
 &lt;li&gt;&lt;a href=&quot;http://www.windycityrails.org/videos/2014/#6&quot;&gt;Domain Driven Rails&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </description>
-        <pubDate>Thu, 26 Feb 2015 11:07:01 -0400</pubDate>
+        <pubDate>Thu, 26 Feb 2015 10:07:01 -0500</pubDate>
         <link>http://cored.github.io/blog/2015/02/26/service-objects-in-rails</link>
         <guid isPermaLink="true">http://cored.github.io/blog/2015/02/26/service-objects-in-rails</guid>
       </item>
@@ -585,7 +624,7 @@ have more unrelated logic inside the model pointing once more that we need
 a new abstraction. At least that&amp;#39;s what I see and that&amp;#39;s what I&amp;#39;ll be working
 for my next set of refactoring for this code.  &lt;/p&gt;
 </description>
-        <pubDate>Mon, 12 Jan 2015 22:46:03 -0400</pubDate>
+        <pubDate>Mon, 12 Jan 2015 21:46:03 -0500</pubDate>
         <link>http://cored.github.io/blog/2015/01/12/how-to-identify-more-than-one-level-of-abstraction-in-a-method</link>
         <guid isPermaLink="true">http://cored.github.io/blog/2015/01/12/how-to-identify-more-than-one-level-of-abstraction-in-a-method</guid>
       </item>
@@ -610,7 +649,7 @@ The downside on this is that I really don&amp;#39;t know what I don&amp;#39;t kn
 That&amp;#39;s why I just decide to start reading one book with different ideas in 
 it - &lt;a href=&quot;https://pragprog.com/book/btlang/seven-languages-in-seven-weeks&quot;&gt;Seven languages in seven weeks&lt;/a&gt;. &lt;/p&gt;
 </description>
-        <pubDate>Sun, 11 Jan 2015 19:41:31 -0400</pubDate>
+        <pubDate>Sun, 11 Jan 2015 18:41:31 -0500</pubDate>
         <link>http://cored.github.io/blog/2015/01/11/picking-the-language-of-the-year</link>
         <guid isPermaLink="true">http://cored.github.io/blog/2015/01/11/picking-the-language-of-the-year</guid>
       </item>
@@ -680,69 +719,9 @@ I read.&lt;/p&gt;
 &lt;li&gt;Read a book a week&lt;/li&gt;
 &lt;/ul&gt;
 </description>
-        <pubDate>Wed, 31 Dec 2014 14:55:01 -0400</pubDate>
+        <pubDate>Wed, 31 Dec 2014 13:55:01 -0500</pubDate>
         <link>http://cored.github.io/blog/2014/12/31/in-the-year-2014</link>
         <guid isPermaLink="true">http://cored.github.io/blog/2014/12/31/in-the-year-2014</guid>
-      </item>
-    
-      <item>
-        <title>Kata a day: Narcissistic numbers</title>
-        <description>&lt;h1&gt;Problem Statement&lt;/h1&gt;
-
-&lt;p&gt;A &lt;a href=&quot;https://en.wikipedia.org/wiki/Narcissistic_number&quot;&gt;Narcissistic Number&lt;/a&gt; is a
-number which is the sum of its own digits, each raised to the power of the
-number of digits.&lt;/p&gt;
-
-&lt;h1&gt;Specification&lt;/h1&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;describe&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Narcissistic&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;returns true for one&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-    &lt;span class=&quot;no&quot;&gt;Narcissistic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;must_equal&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;returns false for for 22&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-    &lt;span class=&quot;no&quot;&gt;Narcissistic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;22&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;must_equal&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;returns true for 153&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-    &lt;span class=&quot;no&quot;&gt;Narcissistic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;153&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;must_equal&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;returns true for 1634&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-    &lt;span class=&quot;no&quot;&gt;Narcissistic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1634&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;must_equal&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h1&gt;Implementation&lt;/h1&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Narcissistic&lt;/span&gt;
-  &lt;span class=&quot;kp&quot;&gt;extend&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;
-
-  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;num&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;numbers&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;num&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;chars&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;numbers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:to_i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;inject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;number&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;number&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numbers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;num&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h1&gt;What did I learn about this kata?&lt;/h1&gt;
-
-&lt;p&gt;For starters; I think that one of the things that I learned was related to idiomatic
-Ruby instead of anything else; it is obvious that this problem is very simple. So
-What ocurrs to me was just to switch things up a little bit not from the complexity
-stand point just from the idiomatic stand point.&lt;/p&gt;
-
-&lt;p&gt;As Ruby have the same notion as Perl does &lt;em&gt;TMTOWTDI&lt;/em&gt; I decided to just switch some
-small details of the implementation. For instance:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;  &lt;span class=&quot;n&quot;&gt;numbers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;map&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numbers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;inject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;I feel this looks more concise at least to me; actually have to give it a little bit
-more of thought; anyways that was the Kata for today. If you want to try to do the
-same and find problems to solve on a daily or weekly basics just go ahead to
-(Codewars)[http://codewars.com] great resource for keep getting better at
-programming. Happy hacking!&lt;/p&gt;
-</description>
-        <pubDate>Tue, 21 Oct 2014 00:00:00 -0400</pubDate>
-        <link>http://cored.github.io/blog/2014/10/21/kata-a-day-narcissistic-numbers</link>
-        <guid isPermaLink="true">http://cored.github.io/blog/2014/10/21/kata-a-day-narcissistic-numbers</guid>
       </item>
     
   </channel>
