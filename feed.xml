@@ -17,7 +17,7 @@ duplication of process. It is a perfect vehicle for hiding information&lt;/em&gt
 &lt;a href=&quot;http://github.com/namely/broadway&quot;&gt;Broadway&lt;/a&gt; Namely&amp;#39;s deployment tool for staging environments.&lt;/p&gt;
 
 &lt;p&gt;Broadway has the concept of an instance which is the data representation of what the
-system uses to deploy services into [Kubernetes]((http://kubernetes.io).&lt;/p&gt;
+system uses to deploy services into &lt;a href=&quot;http://kubernetes.io&quot;&gt;Kubernetes&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;Here is the definition of that data:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;type Instance struct {
