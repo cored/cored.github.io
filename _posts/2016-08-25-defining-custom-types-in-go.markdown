@@ -13,7 +13,7 @@ Let's explore this issue with some code extracted from an OSS project
 [Broadway](http://github.com/namely/broadway) Namely's deployment tool for staging environments.
 
 Broadway has the concept of an instance which is the data representation of what the
-system uses to deploy services into [Kubernetes]((http://kubernetes.io).
+system uses to deploy services into [Kubernetes](http://kubernetes.io).
 
 Here is the definition of that data:
 
