@@ -8,6 +8,109 @@
     <atom:link href="http://cored.github.io/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Defining custom types in Go</title>
+        <description>&lt;p&gt;As Alan Perlis once said:
+&lt;em&gt;The string is a stark data structure and everywhere it is passed there is much
+duplication of process. It is a perfect vehicle for hiding information&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Let&amp;#39;s explore this issue with some code extracted from an OSS project
+&lt;a href=&quot;http://github.com/namely/broadway&quot;&gt;Broadway&lt;/a&gt; Namely&amp;#39;s deployment tool for staging environments.&lt;/p&gt;
+
+&lt;p&gt;Broadway has the concept of an instance which is the data representation of what the
+system uses to deploy services into [Kubernetes]((http://kubernetes.io).&lt;/p&gt;
+
+&lt;p&gt;Here is the definition of that data:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;type Instance struct {
+  PlaybookID string
+  ID string
+  Status
+}
+
+func (i *Instance) Path() string {
+  return fmt.Sprintf(&amp;quot;%s/instances/%s/%s&amp;quot;, env.EtcdPath, i.PlaybookID, i.ID)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The main issue with this implementation is duplication. If a programmer needs
+a &lt;code&gt;Path&lt;/code&gt; for others use cases he will have to replicate the same string formatting
+every time. The problem with this is the duplication of information.&lt;/p&gt;
+
+&lt;p&gt;The &lt;a href=&quot;https://en.wikipedia.org/wiki/Don%27t_repeat_yourself&quot;&gt;don&amp;#39;t repeat yourself&lt;/a&gt; principle states to have only one representation of
+any concept in the system; abstractions like this make new concepts evident.&lt;/p&gt;
+
+&lt;p&gt;How can we solve that issue? One approach would be to create a function
+to do the formatting, like so:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;func BuildPath(PlaybookID, ID string) string {
+  return fmt.Sprintf(&amp;quot;%s/instances/%s/%s&amp;quot;, env.EtcdPath, PlaybookID, ID)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And that will reduce the coupling between the data and the behavior. However if
+we take a look a little bit closer we are actually hiding is an important concept
+from the domain which is a &lt;code&gt;Path&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;How do we know that we are hiding an important concept from the system? To
+answer that question let&amp;#39;s take a look to another code example:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;func ThatExpectAPath(path string) {
+  // do something here with a Path
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The issue here is that the function is expecting a &lt;code&gt;string&lt;/code&gt; as an argument not
+specifically a &lt;code&gt;Path&lt;/code&gt; type which is the actual concept that this function needs.
+The reason why this is an issue is  because you could pass any string and the compiler
+won&amp;#39;t complain. Wouldn&amp;#39;t be better if you have a safety net in place to force you to
+look the proper way for formatting a &lt;code&gt;Path&lt;/code&gt;? Well you have it since you are using an
+static typed language. The only piece missing is the new type definition which for this
+particular case at least the naming is evident; let&amp;#39;s see this in action:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;type Path struct {
+  PlaybookID string
+  ID string
+  RootPath string
+}
+
+func (p *Path) String() string {
+  return fmt.Sprintf(&amp;quot;%s/instances/%s/%s&amp;quot;, p.RootPath, p.PlaybookID, p.ID)
+}
+
+func ThatExpectAPath(path Path) {
+  // do something here with a Path
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The two main benefits of this approach are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&quot;;t:%20l%20%20//en.wikipedia.org/wiki/Separation_of_concernsss&quot;&gt;Separation of concerns&lt;/a&gt;, now every time that we want to change something in the
+system we won&amp;#39;t need to hunt down for different ways for creating a new &lt;code&gt;Path&lt;/code&gt;
+we are going to look at the type and do what we need according to that definition.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&quot;&quot;&gt;Higher level of abstraction&lt;/a&gt;, the only way that we humans have to avoid
+complexity is to work on a higher level of abstraction. We can get more done by
+combining different components rather than manipulating variables and control
+flows.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;What about creating the wrong abstraction? The answer for that one is easy;
+just rollback into the old code and start over. It will be easier for the client
+to remove a type and start with duplication than to hunt that code down and remove
+it when there&amp;#39;s no obvious starting point.&lt;/p&gt;
+
+&lt;p&gt;How does this small piece fit with the rest of the system? Now we can use the
+embedded type mechanism of Go and compose our old type.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;type Instance struct {
+  ...
+  Path
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;With that in place we can keep using the same formatting across the system and
+have the safety net of the compiler when passing that concept around.&lt;/p&gt;
+
+&lt;p&gt;By introducing this custom type in the system we decrease the translation cost
+between &lt;a href=&quot;http://martinfowler.com/bliki/UbiquitousLanguage.html&quot;&gt;business concepts and implementation details&lt;/a&gt; making it easier for developers
+to compose better abstractions with smaller reusable components.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 25 Aug 2016 08:42:34 -0400</pubDate>
+        <link>http://cored.github.io/blog/2016/08/25/defining-custom-types-in-go</link>
+        <guid isPermaLink="true">http://cored.github.io/blog/2016/08/25/defining-custom-types-in-go</guid>
+      </item>
+    
+      <item>
         <title>Test Doubles in Go</title>
         <description>&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;// Examples of doing test doubles in Go tests
 // Extracted from https://blog.8thlight.com/uncle-bob/2014/05/14/TheLittleMocker.html
@@ -652,76 +755,6 @@ it - &lt;a href=&quot;https://pragprog.com/book/btlang/seven-languages-in-seven-
         <pubDate>Sun, 11 Jan 2015 18:41:31 -0500</pubDate>
         <link>http://cored.github.io/blog/2015/01/11/picking-the-language-of-the-year</link>
         <guid isPermaLink="true">http://cored.github.io/blog/2015/01/11/picking-the-language-of-the-year</guid>
-      </item>
-    
-      <item>
-        <title>In the Year 2014</title>
-        <description>&lt;p&gt;2014 was a year in which I learned and discovered a lot of things, not just in
-the professional realm but in the personal too.&lt;/p&gt;
-
-&lt;h1&gt;Great blog posts I read&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://www.theverge.com/2014/12/4/7332307/eric-garner-daniel-pantaleo-police-death-camera-accountability&quot;&gt;If cameras can&amp;#39;t hold police accountable in Eric Garner&amp;#39;s death, what can?&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://www.theverge.com/2014/11/20/7254931/how-ipads-are-making-airports-less-miserable-places&quot;&gt;How iPads are making airports less terrible&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://www.theverge.com/2014/11/18/7235895/seeing-i-artist-to-spend-a-month-in-virtual-reality&quot;&gt;How to live for a month in virtual reality&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://www.bignerdranch.com/blog/why-we-teach-rack-in-our-ruby-on-the-server-bootcamp/?utm_source=rubyweekly&amp;amp;utm_medium=email&quot;&gt;Why we teach rack in our Ruby on the Server Bootcamp&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://www.rubyraptor.org/how-we-made-raptor-up-to-4x-faster-than-unicorn-and-up-to-2x-faster-than-puma-torquebox/?utm_source=rubyweekly&amp;amp;utm_medium=email&quot;&gt;How we&amp;#39;ve made Phusion Passenger 5 (&amp;quot;Raptor&amp;quot;) up 4x faster than Unicorn, up to
-2x faster than Puma, Torquebox&lt;/a&gt;&lt;/p&gt;
-
-&lt;h1&gt;Great talks I watched&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=GTpZ0ffQrIE&amp;amp;index=17&amp;amp;list=PLpURC3VhaQD0ZAbMQcN_-6Dra_rWD7VwU&quot;&gt;Katrina Owen - Overkill&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=nBtO1UOK9Hs&quot;&gt;Nell Shamrell - Test Driven Development: A Love Story&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://ideas.ted.com/2014/07/01/i-share-everything-or-do-i/&quot;&gt;I share everything. Or do I?&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=EgjJYkuV0Sc&amp;amp;index=117&amp;amp;list=WL&quot;&gt;Ernie Miller - Ruby after Rails&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=_zoG2i7pMxg&amp;amp;index=116&amp;amp;list=WL&quot;&gt;Questions for Matz&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=WACeVniGlqw&amp;amp;index=91&amp;amp;list=WL&quot;&gt;Are you lonely?&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Of course I saw a ton more talks but this were the ones that I think resonate
-the most on me.&lt;/p&gt;
-
-&lt;h1&gt;Papers I read&lt;/h1&gt;
-
-&lt;p&gt;Not that much on this department; will try to read more papers for thew new year :-)&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://ccr.sigcomm.org/online/files/p83-keshavA.pdf&quot;&gt;How to read a paper&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://www.cs.virginia.edu/%7Eevans/cs655/readings/steele.pdf&quot;&gt;Growing a language&lt;/a&gt;&lt;/p&gt;
-
-&lt;h1&gt;Katas solved&lt;/h1&gt;
-
-&lt;p&gt;I actually solved more than this, but I wasn&amp;#39;t tracking katas from other
-sources.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://codewars.com/users/cored&quot;&gt;70&lt;/a&gt;&lt;/p&gt;
-
-&lt;h1&gt;Books I read&lt;/h1&gt;
-
-&lt;p&gt;This year was slow in comparison with others but I&amp;#39;m trying to absorb what
-I read.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.goodreads.com/review/list/5808742-rafael-george?shelf=2014_read&quot;&gt;Read on 2014&lt;/a&gt;&lt;/p&gt;
-
-&lt;h1&gt;Plans for 2015&lt;/h1&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Read a paper each week&lt;/li&gt;
-&lt;li&gt;Start learning Clojure and Go&lt;/li&gt;
-&lt;li&gt;Read a book a week&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Wed, 31 Dec 2014 13:55:01 -0500</pubDate>
-        <link>http://cored.github.io/blog/2014/12/31/in-the-year-2014</link>
-        <guid isPermaLink="true">http://cored.github.io/blog/2014/12/31/in-the-year-2014</guid>
       </item>
     
   </channel>
