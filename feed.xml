@@ -8,6 +8,279 @@
     <atom:link href="http://cored.github.io/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Single Responsibility Principle in Go</title>
+        <description>&lt;p&gt;After watching &lt;a href=&quot;https://gist.github.com/2ef5f7b69f1eef54ff856ab8beeaf81d&quot;&gt;Dave Cheney&amp;#39;s talk about SOLID principles in Go&lt;/a&gt;,
+I wanted to jump into the discussion in a practical way; so I decided to solve
+an small problem and see how to apply at least one principle in this case SRP.
+The problem that I&amp;#39;m going to solve is to build a data model for
+for &lt;a href=&quot;https://en.wikipedia.org/wiki/Standard_52-card_deck&quot;&gt;a deck of cards&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;To make sure that we are going to move in the right path let&amp;#39;s try to TDD our
+way through this problem.  TDD is a tool for designing software and as a side effect
+it provides us with the benefit of automatic correctness checking.&lt;/p&gt;
+
+&lt;p&gt;So, How do we start? Let&amp;#39;s define some requirements based on the Wikipedia
+article.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;When dealing a new deck
+I want to get 52 cards
+
+When I put card in the deck
+I want to see a rank and a suit for that card
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;I think this two requirements are good to start and we can always go back to
+our product owner and add more stories to the backlog.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;#39;s implement the first requirement by writing a test. Before dealing the deck we
+need to create it; so let&amp;#39;s write that test.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;package main_test
+
+import (
+    &amp;quot;testing&amp;quot;
+
+    &amp;quot;github.com/stretchr/testify/assert&amp;quot;
+)
+
+func TestNewDeck(t *testing.T) {
+    t.Run(&amp;quot;when creating a new deck&amp;quot;, func(t *testing.T) {
+        deck := Deck{}
+
+        assert.Equal(t, len(deck.Cards), 52, &amp;quot;retrieve 52 cards&amp;quot;)
+    })
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;A good practice for naming package for testing is to use the &lt;code&gt;_test&lt;/code&gt; by using
+this nomenclature we will be force to be explicit about external dependencies
+by exporting just what we need. Since the test is our first client it make a lot
+of sense.&lt;/p&gt;
+
+&lt;p&gt;By running the test we get the following error:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;main_test.go|14| deck.Cards undefined (type main.Deck has no field or method Cards)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The compiler is saying that we need to add a new &lt;code&gt;Deck&lt;/code&gt; struct with a field
+name &lt;code&gt;Cards&lt;/code&gt; exposing the question - what is a card? The way to figure that out
+is by adding a new test for it. If we take a closer look at our old test it doesn&amp;#39;t
+say much about what makes a card be a card. Based on the wikipedia article we know
+that a card consist of a rank and a suit. So let&amp;#39;s define that test.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;    t.Run(&amp;quot;when creating a new deck&amp;quot;, func(t *testing.T) {
+        deck := Deck{}
+        t.Run(&amp;quot;it contains four aces of spades, clubs, diamonds and hearts&amp;quot;, func(t *testing.T) {
+            aces := []Card{}
+            expectedCards := []Card{
+                Card{Rank: &amp;quot;ace&amp;quot;, Suit: &amp;quot;hearts&amp;quot;},
+                Card{Rank: &amp;quot;ace&amp;quot;, Suit: &amp;quot;diamonds&amp;quot;},
+                Card{Rank: &amp;quot;ace&amp;quot;, Suit: &amp;quot;spades&amp;quot;},
+                Card{Rank: &amp;quot;ace&amp;quot;, Suit: &amp;quot;clubs&amp;quot;},
+            }
+            for _, card := range deck.Cards {
+                if card.Rank == &amp;quot;ace&amp;quot; {
+                    aces := append(aces, card)
+                }
+            }
+            assert.Equal(t, expectedCards, aces)
+        })
+    })
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;What we get by running this test is the following error:
+&lt;code&gt;
+main.go|4| undefined: Card
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;So let&amp;#39;s define the &lt;code&gt;Card&lt;/code&gt; type:
+&lt;code&gt;
+type Card struct {
+    Rank string
+    Suit string
+}
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;After writing the production code the test is showing us our first assertion failure:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;--- FAIL: TestNewDeck (0.00s)
+        --- FAIL: TestNewDeck/when_creating_a_new_deck (0.00s)
+                --- FAIL: TestNewDeck/when_creating_a_new_deck/it_contains_four_aces_of_spades,_clubs,_diamonds_and_hearts (0.00s)
+                Error Trace:    ns.go:225:
+                Error:          Not equal: []main.Card{main.Card{Rank:&amp;quot;ace&amp;quot;, Suit:&amp;quot;hearts&amp;quot;}, main.Card{Rank:&amp;quot;ace&amp;quot;, Suit:&amp;quot;diamonds&amp;quot;}, main.Card{Rank:&amp;quot;ace&amp;quot;, Suit:&amp;quot;spades&amp;quot;}, main.Card{Rank:&amp;quot;ace&amp;quot;, Suit:&amp;quot;clubs&amp;quot;}} (expected)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Since we need a way to build the inner state of the deck at this point is a good idea
+to introduce a proper constructor for the &lt;code&gt;Deck&lt;/code&gt; to handle the initial state of
+the data:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;var (
+    ranks = []string{&amp;quot;ace&amp;quot;}
+    suits = []string{&amp;quot;hearts&amp;quot;, &amp;quot;diamonds&amp;quot;, &amp;quot;spades&amp;quot;, &amp;quot;clubs&amp;quot;}
+)
+
+type Card struct {
+    Rank string
+    Suit string
+}
+
+type Deck struct {
+    Cards []Card
+}
+
+func NewDeck() Deck {
+    cards := []Card{}
+    for _, rank := range ranks {
+        for _, suit := range suits {
+            cards = append(cards, Card{Rank: rank, Suit: suit})
+        }
+    }
+    return Deck{Cards: cards}
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;After making our first test green let&amp;#39;s see if we can finish the TDD loop cycle
+with a refactor. Our rule of thumbs for doing refactoring is to follow the
+SOLID principles.&lt;/p&gt;
+
+&lt;p&gt;What can we refactor? One thing that we could do is to introduce better names
+for our packages. The &lt;code&gt;main&lt;/code&gt; package name does not say much about what the
+inner components are so let&amp;#39;s use the name &lt;code&gt;deck&lt;/code&gt; instead. By changing the name
+of the package we are following SRP by grouping components that change for the
+same reason.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;package deck
+
+var (
+    ranks = []string{&amp;quot;ace&amp;quot;}
+    suits = []string{&amp;quot;hearts&amp;quot;, &amp;quot;diamonds&amp;quot;, &amp;quot;spades&amp;quot;, &amp;quot;clubs&amp;quot;}
+)
+
+type Card struct {
+    Rank string
+    Suit string
+}
+
+type Deck struct {
+    Cards []Card
+}
+
+func NewDeck() Deck {
+    cards := []Card{}
+    for _, rank := range ranks {
+        for _, suit := range suits {
+            cards = append(cards, Card{Rank: rank, Suit: suit})
+        }
+    }
+    return Deck{Cards: cards}
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Good we rename the package name and the test keep passing. Now there&amp;#39;s
+something else that is showing up and is the fact that we have a name overload
+for our constructor we don&amp;#39;t need to say that we are creating a new deck if we
+are already using the &lt;code&gt;deck&lt;/code&gt; as a package name so let&amp;#39;s rename that
+constructor:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;package deck
+
+var (
+    ranks = []string{&amp;quot;ace&amp;quot;}
+    suits = []string{&amp;quot;hearts&amp;quot;, &amp;quot;diamonds&amp;quot;, &amp;quot;spades&amp;quot;, &amp;quot;clubs&amp;quot;}
+)
+
+type Card struct {
+    Rank string
+    Suit string
+}
+
+type Deck struct {
+    Cards []Card
+}
+
+func New() Deck {
+    cards := []Card{}
+    for _, rank := range ranks {
+        for _, suit := range suits {
+            cards = append(cards, Card{Rank: rank, Suit: suit})
+        }
+    }
+    return Deck{Cards: cards}
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;That looks accurate however what about the &lt;code&gt;Card&lt;/code&gt; struct? Do we really need to
+export it? Are we going to use a &lt;code&gt;Card&lt;/code&gt; without a &lt;code&gt;Deck&lt;/code&gt; ever? Well to me it
+doesn&amp;#39;t make sense to use just one a card without the entire deck unless you
+are the Joker. So let&amp;#39;s not export this structure to the outside world.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;package deck
+
+var (
+    ranks = []string{&amp;quot;ace&amp;quot;}
+    suits = []string{&amp;quot;hearts&amp;quot;, &amp;quot;diamonds&amp;quot;, &amp;quot;spades&amp;quot;, &amp;quot;clubs&amp;quot;}
+)
+
+type card struct {
+    Rank string
+    Suit string
+}
+
+type Deck struct {
+    Cards []Card
+}
+
+func New() Deck {
+    cards := []Card{}
+    for _, rank := range ranks {
+        for _, suit := range suits {
+            cards = append(cards, card{Rank: rank, Suit: suit})
+        }
+    }
+    return Deck{Cards: cards}
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;After doing that change and running the test we get a new compilation error:
+&lt;code&gt;
+deck_test.go|14| undefined: deck.Card
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Here comes the confirmation of the use of &lt;code&gt;_test&lt;/code&gt; since we are not allowed to
+use private members of our package we will need to think in terms of how the
+client will use the information that belong to our two data structures. Instead
+of initializing an expected list of cards let&amp;#39;s define it in terms of it&amp;#39;s
+formatted data or in other words what a final user will want to know something that
+we can build without thinking about too many internal details:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;func TestNewDeck(t *testing.T) {
+    t.Run(&amp;quot;when creating a new deck&amp;quot;, func(t *testing.T) {
+        d := deck.New()
+        t.Run(&amp;quot;it contains four aces of spades, clubs, diamonds and hearts&amp;quot;, func(t *testing.T) {
+            aces := []string{}
+            expectedCards := []string{
+                `ace of hearts`,
+                `ace of diaminds`,
+                `ace of spades`,
+                `ace of clubs`,
+            }
+            for _, card := range d.Cards {
+                if card.Rank == &amp;quot;ace&amp;quot; {
+                    aces = append(aces, card.String())
+                }
+            }
+            assert.Equal(t, expectedCards, aces)
+        })
+
+    })
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;After refactoring the test we get the following error:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;deck_test.go|23| card.String undefined (type deck.card has no field or method String)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Because of course we are missing the implementation of the &lt;code&gt;stringer&lt;/code&gt; interface
+let&amp;#39;s add that:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;func (c card) String() string {
+    return fmt.Sprintf(&amp;quot;%s of %s&amp;quot;, c.Rank, c.Suit)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;I think this is a good spot to stop; since the idea was to showcase just
+the Single Responsibility Principle.&lt;/p&gt;
+
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;As Sandi Metz said &lt;code&gt;Design is the art of arranging code that needs to work
+today, and to be easy to change forever&lt;/code&gt; something that we can do with the TDD
+cycle by making a failing test past and then moving the design towards the
+SOLID principle through continuous refactor.&lt;/p&gt;
+</description>
+        <pubDate>Mon, 26 Sep 2016 17:28:18 -0400</pubDate>
+        <link>http://cored.github.io/blog/2016/09/26/following-solid-in-go-srp</link>
+        <guid isPermaLink="true">http://cored.github.io/blog/2016/09/26/following-solid-in-go-srp</guid>
+      </item>
+    
+      <item>
         <title>Defining custom types in Go</title>
         <description>&lt;p&gt;As Alan Perlis once said:
 &lt;em&gt;The string is a stark data structure and everywhere it is passed there is much
@@ -730,31 +1003,6 @@ for my next set of refactoring for this code.  &lt;/p&gt;
         <pubDate>Mon, 12 Jan 2015 21:46:03 -0500</pubDate>
         <link>http://cored.github.io/blog/2015/01/12/how-to-identify-more-than-one-level-of-abstraction-in-a-method</link>
         <guid isPermaLink="true">http://cored.github.io/blog/2015/01/12/how-to-identify-more-than-one-level-of-abstraction-in-a-method</guid>
-      </item>
-    
-      <item>
-        <title>Picking the Language of the Year</title>
-        <description>&lt;p&gt;I don&amp;#39;t need to become an expert just expose myself to new ideas. But one of the issues 
-of learning something new when there are so many options is to know which
-option to pick. &lt;/p&gt;
-
-&lt;p&gt;So I decided to make an effort on finding out; the lazy approach would be to
-just ask the web about it. And of course the web has a lot of different
-opinions parting from &lt;a href=&quot;http://www.makeuseof.com/tag/pick-programming-language-learn-today-get-great-job-2-years/&quot;&gt;learning software design&lt;/a&gt;
-instead of a programming language to picking up the most &lt;a href=&quot;http://www.tiobe.com/index.php/content/paperinfo/tpci/index.html&quot;&gt;popular&lt;/a&gt; if you
-don&amp;#39;t know it already. &lt;/p&gt;
-
-&lt;p&gt;I think my approach is based on a mix of both; I would like to learn something 
-pragmatic and also I would that thing teach me new skills in an holistic way. 
-So my approach would be based on identifying what is lacking on my knowledge as a 
-programmer and parting from there I would have a better understanding of my own needs. 
-The downside on this is that I really don&amp;#39;t know what I don&amp;#39;t know. 
-That&amp;#39;s why I just decide to start reading one book with different ideas in 
-it - &lt;a href=&quot;https://pragprog.com/book/btlang/seven-languages-in-seven-weeks&quot;&gt;Seven languages in seven weeks&lt;/a&gt;. &lt;/p&gt;
-</description>
-        <pubDate>Sun, 11 Jan 2015 18:41:31 -0500</pubDate>
-        <link>http://cored.github.io/blog/2015/01/11/picking-the-language-of-the-year</link>
-        <guid isPermaLink="true">http://cored.github.io/blog/2015/01/11/picking-the-language-of-the-year</guid>
       </item>
     
   </channel>
