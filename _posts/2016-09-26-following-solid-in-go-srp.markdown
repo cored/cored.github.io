@@ -22,7 +22,7 @@ article.
 When dealing a new deck
 I want to get 52 cards
 
-When I put card in the deck
+When I put a card in the deck
 I want to see a rank and a suit for that card
 ```
 
