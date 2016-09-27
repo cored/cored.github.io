@@ -4,7 +4,7 @@
  <title>Black Matter</title>
  <link href="http://cored.github.ioatom.xml" rel="self"/>
  <link href="http://cored.github.io"/>
- <updated>2016-09-27T09:28:51-04:00</updated>
+ <updated>2016-09-27T10:14:08-04:00</updated>
  <id>http://cored.github.io</id>
  <author>
    <name></name>
@@ -17,7 +17,7 @@
    <link href="http://cored.github.io/blog/2016/09/26/following-solid-in-go-srp"/>
    <updated>2016-09-26T17:28:18-04:00</updated>
    <id>http://cored.github.io/blog/2016/09/26/following-solid-in-go-srp</id>
-   <content type="html">&lt;p&gt;After watching &lt;a href=&quot;https://gist.github.com/2ef5f7b69f1eef54ff856ab8beeaf81d&quot;&gt;Dave Cheney&amp;#39;s talk about SOLID principles in Go&lt;/a&gt;,
+   <content type="html">&lt;p&gt;After watching &lt;a href=&quot;https://www.youtube.com/watch?v=0IaBAl7onCE&quot;&gt;Dave Cheney&amp;#39;s talk about SOLID principles in Go&lt;/a&gt;,
 I wanted to jump into the discussion in a practical way; so I decided to solve
 an small problem and see how to apply at least one principle in this case SRP.
 The problem that I&amp;#39;m going to solve is to build a data model for
@@ -32,7 +32,7 @@ article.&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;When dealing a new deck
 I want to get 52 cards
 
-When I put card in the deck
+When I put a card in the deck
 I want to see a rank and a suit for that card
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;I think this two requirements are good to start and we can always go back to
