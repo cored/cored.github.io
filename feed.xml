@@ -24,7 +24,7 @@ article.&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;When dealing a new deck
 I want to get 52 cards
 
-When I put a card in the deck
+When I put card in the deck
 I want to see a rank and a suit for that card
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;I think this two requirements are good to start and we can always go back to
@@ -210,11 +210,11 @@ type card struct {
 }
 
 type Deck struct {
-    Cards []Card
+    Cards []card
 }
 
 func New() Deck {
-    cards := []Card{}
+    cards := []card{}
     for _, rank := range ranks {
         for _, suit := range suits {
             cards = append(cards, card{Rank: rank, Suit: suit})
