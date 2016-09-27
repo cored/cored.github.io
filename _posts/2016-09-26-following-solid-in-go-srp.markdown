@@ -5,7 +5,7 @@ date: 2016-09-26T17:28:18-04:00
 categories: ["GoLang", "Software Craftmanship"]
 ---
 
-After watching [Dave Cheney's talk about SOLID principles in Go](https://gist.github.com/2ef5f7b69f1eef54ff856ab8beeaf81d),
+After watching [Dave Cheney's talk about SOLID principles in Go](https://www.youtube.com/watch?v=0IaBAl7onCE),
 I wanted to jump into the discussion in a practical way; so I decided to solve
 an small problem and see how to apply at least one principle in this case SRP.
 The problem that I'm going to solve is to build a data model for
