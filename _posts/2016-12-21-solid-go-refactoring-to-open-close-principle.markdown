@@ -1,6 +1,6 @@
 ---
 layout: post
-title: SOLID GO: Refactoring to Open/Close Principle
+title: SOLID GO - Refactoring to Open/Close Principle
 date: 2016-12-21T07:07:03-05:00
 category: ["Refactor", "Go-Lang", "SOLID"]
 ---
