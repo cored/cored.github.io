@@ -8,7 +8,7 @@
     <atom:link href="http://cored.github.io/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
-        <title>Solid Go Refactoring To Open Close Principle</title>
+        <title>SOLID GO - Refactoring to Open/Close Principle</title>
         <description>&lt;p&gt;This is a continuation of my series of articles related to the SOLID
 principles and how they apply to Go programs.  In this entry I will try to
 explain how I refactored a piece of functionality to make it open for extension
@@ -138,7 +138,7 @@ in the future.&lt;/p&gt;
 
 &lt;p&gt;Thanks to &lt;a href=&quot;https://github.com/jefffederman&quot;&gt;Jeff Federman&lt;/a&gt; for the proof reading :-)&lt;/p&gt;
 </description>
-        <pubDate>Wed, 21 Dec 2016 00:00:00 -0500</pubDate>
+        <pubDate>Wed, 21 Dec 2016 07:07:03 -0500</pubDate>
         <link>http://cored.github.io/blog/2016/12/21/solid-go-refactoring-to-open-close-principle</link>
         <guid isPermaLink="true">http://cored.github.io/blog/2016/12/21/solid-go-refactoring-to-open-close-principle</guid>
       </item>

@@ -4,7 +4,7 @@
  <title>Black Matter</title>
  <link href="http://cored.github.ioatom.xml" rel="self"/>
  <link href="http://cored.github.io"/>
- <updated>2016-12-21T07:07:44-05:00</updated>
+ <updated>2016-12-21T07:14:03-05:00</updated>
  <id>http://cored.github.io</id>
  <author>
    <name></name>
@@ -13,9 +13,9 @@
 
  
  <entry>
-   <title>Solid Go Refactoring To Open Close Principle</title>
+   <title>SOLID GO - Refactoring to Open/Close Principle</title>
    <link href="http://cored.github.io/blog/2016/12/21/solid-go-refactoring-to-open-close-principle"/>
-   <updated>2016-12-21T00:00:00-05:00</updated>
+   <updated>2016-12-21T07:07:03-05:00</updated>
    <id>http://cored.github.io/blog/2016/12/21/solid-go-refactoring-to-open-close-principle</id>
    <content type="html">&lt;p&gt;This is a continuation of my series of articles related to the SOLID
 principles and how they apply to Go programs.  In this entry I will try to
