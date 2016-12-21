@@ -1,0 +1,128 @@
+<p>This is a continuation of my series of articles related to the SOLID
+principles and how they apply to Go programs.  In this entry I will try to
+explain how I refactored a piece of functionality to make it open for extension
+and closed for modification.</p>
+
+<p>But first, what does that mean?</p>
+
+<h1>Open/Closed Principle</h1>
+
+<p>The formal definition of this principle goes as follows:</p>
+
+<p><em>You should be able to extend the behavior of a system without having to modify that system.</em></p>
+
+<p>However, in practice, what exactly does that mean? Let&#39;s look at some example
+code which happens to be in production right now. For the sake of simplicity I removed the logic
+related to the persistence side of things.</p>
+<div class="highlight"><pre><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Store</span><span class="p">)</span> <span class="nx">CreateUnlockToken</span><span class="p">(</span><span class="nx">userID</span> <span class="kt">int64</span><span class="p">)</span> <span class="p">(</span><span class="kt">string</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+    <span class="nx">tokenGenerator</span> <span class="o">:=</span> <span class="nx">util</span><span class="p">.</span><span class="nx">NewTokenGenerator</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">TokenPepper</span><span class="p">)</span>
+    <span class="nx">rawToken</span><span class="p">,</span> <span class="nx">encToken</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">tokenGenerator</span><span class="p">.</span><span class="nx">GenerateUnlock</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="nx">err</span>
+    <span class="p">}</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>What this code is trying to do is to create and persist a token in
+the database for a given user. At first glance this code looks ok. But looking
+closer we can see some issues:</p>
+
+<ul>
+<li><p>There&#39;s no way to test the token generation isolated from the persistence
+logic, forcing the test to integrate with the database every time you want to
+test that logic.</p></li>
+<li><p>If I want to reuse this token I will have to duplicate the code.</p></li>
+<li><p>The <code>GenerateUnlock</code> function is returning three types which implies doing
+more than one thing thus breaking the <a href="http://cored.github.io/blog/2016/09/26/following-solid-in-go-srp">Single Responsibility Principle</a></p></li>
+</ul>
+
+<p>Let&#39;s try to address those issues. By introducing an interface we are
+going to make the <code>CreateUnlockToken</code> function depend on an abstraction instead of
+a concrete type and remove the coupling between the store and the token generator:</p>
+<div class="highlight"><pre><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Token</span> <span class="kd">interface</span> <span class="p">{</span>
+    <span class="nx">Raw</span><span class="p">()</span> <span class="kt">string</span>
+    <span class="nx">Encoded</span><span class="p">()</span> <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="kd">type</span> <span class="nx">UnlockToken</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">pepper</span> <span class="kt">string</span>
+    <span class="nx">raw</span> <span class="kt">string</span>
+    <span class="nx">encoded</span> <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nx">NewUnlockToken</span><span class="p">(</span><span class="nx">pepper</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="nx">UnlockToken</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Login to handle the token pepper and return a new UnlockToken</span>
+    <span class="c1">// We are going to return an error just in case something happen while</span>
+    <span class="c1">// generating the unlock token</span>
+
+    <span class="k">return</span> <span class="nx">UnlockToken</span><span class="p">{</span><span class="nx">raw</span><span class="p">:</span> <span class="nx">generatedRaw</span><span class="p">,</span> <span class="nx">encoded</span><span class="p">:</span> <span class="nx">generatedEncoded</span><span class="p">},</span> <span class="kc">nil</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">ult</span> <span class="nx">UnlockToken</span><span class="p">)</span> <span class="nx">Raw</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">ult</span><span class="p">.</span><span class="nx">raw</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">ult</span> <span class="nx">UnlockToken</span><span class="p">)</span> <span class="nx">Encoded</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">ult</span><span class="p">.</span><span class="nx">encoded</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nx">TestUnlockToken</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">t</span><span class="p">.</span><span class="nx">Run</span><span class="p">(</span><span class="s">&quot;when generating a valid unlock token&quot;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// ... assert for raw and encoded</span>
+    <span class="p">})</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>And now the new implementation for the store goes like this:</p>
+<div class="highlight"><pre><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Store</span><span class="p">)</span> <span class="nx">CreateUnlockToken</span><span class="p">(</span><span class="nx">email</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">userID</span> <span class="kt">int64</span><span class="p">,</span> <span class="nx">token</span> <span class="nx">Token</span><span class="p">)</span> <span class="p">(</span><span class="kt">string</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+    <span class="c1">// use the token data by calling token.Raw() or token.Encoded()</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>And the test will look like this:</p>
+<div class="highlight"><pre><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">FakeUnlockToken</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">MockedRaw</span> <span class="kd">func</span><span class="p">()</span> <span class="kt">string</span>
+    <span class="nx">MockedEncoded</span> <span class="kd">func</span><span class="p">()</span> <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">fut</span> <span class="nx">FakeUnlockToken</span><span class="p">)</span> <span class="nx">Raw</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">fut</span><span class="p">.</span><span class="nx">MockedRaw</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">fut</span> <span class="nx">FakedUnlockToken</span><span class="p">)</span> <span class="nx">Encoded</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">fut</span><span class="p">.</span><span class="nx">MockedEncoded</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nx">TestCreateUnlockToken</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">t</span><span class="p">.</span><span class="nx">Run</span><span class="p">(</span><span class="s">&quot;when passing an invalid token&quot;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">postgresStore</span> <span class="o">:=</span> <span class="nx">NewPostgres</span><span class="p">()</span>
+        <span class="nx">fut</span> <span class="o">:=</span> <span class="nx">FakeUnlockToken</span><span class="p">{</span>
+            <span class="nx">MockedRaw</span><span class="p">:</span> <span class="kd">func</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="s">&quot;invalid-raw&quot;</span>
+            <span class="p">},</span>
+            <span class="nx">MockedEncoded</span><span class="p">:</span> <span class="kd">func</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="s">&quot;invalid-encoded&quot;</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+
+        <span class="c1">// ... persistence assertions</span>
+    <span class="p">})</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>This looks better now so I guess we can close our editors go home and chill,
+right? Wrong. There&#39;s something missing from this code which is the fact that
+we need to instantiate our new <code>UnlockToken</code>. Since the new <code>CreateUnlockToken</code>
+depends on a token and we want to inject it, let&#39;s make the client of that
+function be the one instantiating the token.</p>
+<div class="highlight"><pre><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Server</span><span class="p">)</span> <span class="nx">CreateUnlockToken</span><span class="p">(</span><span class="o">...</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">s</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">CreateUnlockToken</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">Email</span><span class="p">,</span> <span class="nx">req</span><span class="p">.</span><span class="nx">UserID</span><span class="p">,</span> <span class="nx">NewUnlockToken</span><span class="p">{</span><span class="nx">s</span><span class="p">.</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">TokenPepper</span><span class="p">})</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Voila! With this small refactor we changed the inner components of the code to
+depend on an abstraction and now we can swap implementations of tokens.</p>
+
+<p>The open/closed principle helps us by reducing the coupling between components and
+as a consequence we will have maintainable code bases that are easier to extend and change
+in the future.</p>
+
+<p>Thanks to <a href="https://github.com/jefffederman">Jeff Federman</a> for the proof reading :-)</p>
